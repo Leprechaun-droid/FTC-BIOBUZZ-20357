@@ -1,14 +1,12 @@
 package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
 
-import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.RobotContainer.Robot;
-import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 public class MainDrive extends LinearOpMode {
     private Robot robot;
-    private Follower follower
+    //private Follower follower;
 
 
 
