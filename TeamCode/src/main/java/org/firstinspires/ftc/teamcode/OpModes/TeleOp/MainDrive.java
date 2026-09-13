@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
 
+import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.RobotContainer.Robot;
+import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 public class MainDrive extends LinearOpMode {
     private Robot robot;
+    private Follower follower
 
 
 
@@ -17,7 +20,12 @@ public class MainDrive extends LinearOpMode {
 
     public void runOpMode(){
         robot = new Robot(hardwareMap);
-
+        //follower = Constants.create(hardwareMap)
+        //follower.setPose()
+        /*
+        using follower to track position probably won't work unless I can find a way to put its
+        position at the end of the selected Auto
+        */
 
 
         waitForStart();
@@ -36,6 +44,13 @@ public class MainDrive extends LinearOpMode {
 
 
 
+
+            telemetry.addData("lf_motor_power", robot.drivetrain.getLFMotorPower());
+            telemetry.addData("lb_motor_power", robot.drivetrain.getLBMotorPower());
+            telemetry.addData("rf_motor_power", robot.drivetrain.getRFMotorPower());
+            telemetry.addData("rb_motor_power", robot.drivetrain.getRBMotorPower());
+
+            //telemetry.addData("robotPose", "%2f, %2f", follower.pose().x(), follower.pose().y());
 
 
         }
