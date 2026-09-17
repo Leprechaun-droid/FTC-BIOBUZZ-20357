@@ -24,6 +24,8 @@ import org.firstinspires.ftc.vision.opencv.ImageRegion;
 
 import java.util.List;
 
+
+
 public class Vision {
 
     //UPDATE OUTLINE AFTER EVERY COMMIT
@@ -64,14 +66,16 @@ public class Vision {
     private VisionPortal.Builder builder;
     private VisionPortal visionPortal;
 
+    List<AprilTagDetection> currentDetections;
 
 
-    private final double cameraXOffset = "put X offset value";
-    private final double cameraYOffset = "put Y Offset value";
-    private final double cameraZOffset = "put Z Offset value";
-    private final double cameraYaw = "put yaw of camera in degrees";
-    private final double cameraPitch = "put pitch of camera in degrees";
-    private final double cameraRoll = "put roll of camera in degrees";
+
+    //private final double cameraXOffset = "put X offset value";
+    //private final double cameraYOffset = "put Y Offset value";
+    //private final double cameraZOffset = "put Z Offset value";
+    //private final double cameraYaw = "put yaw of camera in degrees";
+    //private final double cameraPitch = "put pitch of camera in degrees";
+    //private final double cameraRoll = "put roll of camera in degrees";
 
 
 
@@ -200,7 +204,7 @@ public class Vision {
             builder.setCamera("Webcam 1");
         } else {
             //may not work because we dont have a camera phone, check if this is still valid
-            builder.setCamera(BuiltinCameraDirection.BACK)
+            builder.setCamera(BuiltinCameraDirection.BACK);
         }
 
         builder = new VisionPortal.Builder();
@@ -209,11 +213,15 @@ public class Vision {
 
         //check resolution in case something needs to be changed or if the previous resolution was wrong
         builder.setCameraResolution(new Size(RESOLUTION_WIDTH, RESOLUTION_HEIGHT));
-        builder.addProcessors(aprilTagProcessor, redNectarLocator, blueNectarLocator, pollenLocator)
-
+        builder.addProcessors(aprilTagProcessor, redNectarLocator, blueNectarLocator, pollenLocator);
 
 
         visionPortal = builder.build();
+
+        visionPortal.setProcessorEnabled(aprilTagProcessor, false);
+        visionPortal.setProcessorEnabled(redNectarLocator, false);
+        visionPortal.setProcessorEnabled(blueNectarLocator, false);
+        visionPortal.setProcessorEnabled(pollenLocator, false);
 
 
 
@@ -232,7 +240,7 @@ public class Vision {
 
     //may have to put this method in a separate class. It is so large.
     public void useAprilTagsToSetCellState(Robot.Alliance alliance){
-        List<AprilTagDetection> currentDetections = aprilTagProcessor.getDetections();
+        currentDetections = aprilTagProcessor.getDetections();
         //Find the height a cell needs to be above to be considered raised
         double RAISED_CELL_HEIGHT_THRESHOLD = null;
 
@@ -313,56 +321,52 @@ public class Vision {
 
 
 
+    public double findCellDis(int AprTag1, int AprTag2, int AprTag3, int AprTag4, double robotPosX, double robotPosY){
+        double sumX = 0;
+        double sumY = 0;
+        double numAprTags = 0;
+
+        List<AprilTagDetection> cellDetections;
+
+        for(AprilTagDetection d : currentDetections){
+            if((d == AprTag1) || (d == AprTag2) || (d == AprTag3) || (d == AprTag4)){
+                cellDetections.add(d);
+            } else{
+                //leave blank; should do nothing with the rest
+            }
+        }
+
+            for(AprilTagDetection d : cellDetections) {
+                sumX += d.ftcPose.x;
+                sumY += d.ftcPose.y;
+                numAprTags += 1;
+            }
+
+        double avgX = 0;
+        double avgY = 0;
+        if(numAprTags > 0){
+            avgX = sumX/numAprTags;
+            avgY = sumY/numAprTags;
+        } else {
+            //
+        }
+
+        double disFromRobot = Math.sqrt(Math.pow((robotPosX - avgX), 2) + Math.pow((robotPosY - avgY), 2));
+        return disFromRobot;
 
 
+    }
+    public double getDisFromSpecifiedCell(Robot.Alliance alliance, double robotPosX, double robotPosY){
+        if((alliance == Robot.Alliance.RED) & (robot.getNearRedCellState() == Robot.Near_Red_Cell_State.RAISED)){
+            findCellDis(34, 35, 36, 37, robotPosX, robotPosY);
+        } else if ((alliance == Robot.Alliance.RED) & (robot.getFarRedCellState() == Robot.Far_Red_Cell_State.RAISED)) {
+            findCellDis(30, 31, 32, 33, robotPosX, robotPosY);
+        } else if((alliance == Robot.Alliance.BLUE)){
+
+        }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        }
 
 
 
@@ -420,16 +424,16 @@ public class Vision {
 
 
 
+    /*
+    //Check how to get telemetry in a Subsystem class
+    public void visionTelemetry(){
+
+        telemetry.addData("Current Alliance: ", robot.getAlliance());
+        tel
 
 
-
-
-
-
-
-
-
-
+    }
+    */
 
 
 

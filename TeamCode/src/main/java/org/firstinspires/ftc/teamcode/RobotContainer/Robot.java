@@ -29,7 +29,7 @@ public class Robot {
 
     public Robot(HardwareMap hardwareMap) {
         drivetrain = new Drivetrain(hardwareMap);
-        vision = new Vision();
+        vision = new Vision(hardwareMap);
     }
 
 
@@ -57,6 +57,22 @@ public class Robot {
         farBlueCellState = newCellState;
     }
 
+    public Near_Red_Cell_State getNearRedCellState(){
+        return nearRedCellState;
+    }
+
+    public Far_Red_Cell_State getFarRedCellState(){
+        return farRedCellState;
+    }
+
+    public Near_Blue_Cell_State getNearBlueCellState(){
+        return nearBlueCellState;
+    }
+
+    public Far_Blue_Cell_State getFarBlueCellState(){
+        return farBlueCellState;
+    }
+
 
 
 
@@ -64,6 +80,9 @@ public class Robot {
     public void setAlliance(Alliance newAlliance){
         alliance = newAlliance;
     }
+    public Alliance getAlliance(){return alliance;}
+
+
 
 
 }
