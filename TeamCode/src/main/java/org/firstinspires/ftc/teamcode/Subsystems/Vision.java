@@ -51,10 +51,13 @@ public class Vision {
 
 
 
-    //may make this static so it can be changed, would have be changed to not final if changed to static
+    //may make this static so it can be changed; would have be changed to not final if changed to static
     public final boolean USE_WEBCAM = true;
     public final int RESOLUTION_WIDTH = 1280;
     public final int RESOLUTION_HEIGHT = 720;
+
+    //find a height greater than the lowered cell but lower than the higher cell
+    double RAISED_CELL_HEIGHT_THRESHOLD = 0;
     //adjust this based on the direction of the camera on the robot, will probably be useless and should
     //double check how this works if the Webcam fails, but rememember to double check.
     public final BuiltinCameraDirection CAMERA_DIRECTION = BuiltinCameraDirection.BACK;
@@ -242,7 +245,7 @@ public class Vision {
     public void useAprilTagsToSetCellState(Robot.Alliance alliance){
         currentDetections = aprilTagProcessor.getDetections();
         //Find the height a cell needs to be above to be considered raised
-        double RAISED_CELL_HEIGHT_THRESHOLD = null;
+
 
 
         switch(alliance){
@@ -358,15 +361,17 @@ public class Vision {
     }
     public double getDisFromSpecifiedCell(Robot.Alliance alliance, double robotPosX, double robotPosY){
         if((alliance == Robot.Alliance.RED) & (robot.getNearRedCellState() == Robot.Near_Red_Cell_State.RAISED)){
-            findCellDis(34, 35, 36, 37, robotPosX, robotPosY);
+            return findCellDis(34, 35, 36, 37, robotPosX, robotPosY);
         } else if ((alliance == Robot.Alliance.RED) & (robot.getFarRedCellState() == Robot.Far_Red_Cell_State.RAISED)) {
-            findCellDis(30, 31, 32, 33, robotPosX, robotPosY);
-        } else if((alliance == Robot.Alliance.BLUE)){
-
+            return findCellDis(30, 31, 32, 33, robotPosX, robotPosY);
+        } else if((alliance == Robot.Alliance.BLUE) & (robot.getNearBlueCellState() == Robot.Near_Blue_Cell_State.RAISED)){
+            return findCellDis(38, 39, 40, 41, robotPosX, robotPosY);
+        } else if ((alliance = Robot.Alliance.BLUE) & (robot.getFarBlueCellState() == Robot.Far_Blue_Cell_State.RAISED)) {
+            return findCellDis(42, 43, 44, 45, robotPosX, robotPosY)
+        } else {
+            //nothing
         }
-
-
-        }
+    }
 
 
 

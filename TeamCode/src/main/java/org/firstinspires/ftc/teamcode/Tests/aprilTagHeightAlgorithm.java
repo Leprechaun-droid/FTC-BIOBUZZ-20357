@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.RobotContainer.Robot;
 public class aprilTagHeightAlgorithm extends LinearOpMode {
 
     private Robot robot;
-
+    double horizontal
 
 
 
@@ -20,6 +20,8 @@ public class aprilTagHeightAlgorithm extends LinearOpMode {
         robot.setAlliance(Robot.Alliance.RED);
         waitForStart();
         while(opModeIsActive()){
+            horizontal =
+
             robot.drivetrain.updateMotorPowers();
             robot.vision.useAprilTagsToSetCellState(robot.getAlliance());
 

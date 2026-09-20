@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.OpModes.Auto;
 
 import static com.pedropathing.api.Paths.curve;
 import static com.pedropathing.api.Paths.line;
+import static com.pedropathing.ivy.commands.Commands.instant;
+import static com.pedropathing.ivy.commands.Commands.waitUntil;
+import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 import com.pedropathing.api.PoseFactory;
@@ -24,28 +27,47 @@ public class FarRedBaseAuto extends LinearOpMode {
     private Robot robot;
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
-    private final Pose startPose = poseFactory.of(85, 139, 270);
+    // -----
+    // Poses
+    // -----
+    private final Pose startPos = poseFactory.of(85, 139, 270);
     private final Pose farCellShootPos = poseFactory.of(85, 109, 270);
-
-    private Path fromStartToFarCellShoot() {
-        return line(startPose, farCellShootPos).linear(startPose, farCellShootPos);
-    }
-
-    private final Pose farShootToParkControl = poseFactory.of(129, 106, 0); //control point, so negligible heading
+    private final Pose farShootToParkControl = poseFactory.of(129, 106, 0); //control point, so irrelevant heading
     private final Pose park = poseFactory.of(134, 40, 270);
 
-
-    private Path parkFromFarRedCell() {
+    // -------
+    // Paths
+    // -------
+    private Path startToFarRedShoot() {
+        return line(startPos, farCellShootPos).linear(startPos, farCellShootPos);
+    }
+    private Path farRedCellToPark() {
         return curve(farCellShootPos, farShootToParkControl, park).linear(farCellShootPos, park);
     }
 
-    private Command goToFar() {
-        return follow(follower, fromStartToFarCellShoot());
+    // ---------
+    // Commands
+    // ---------
+    private Command goToFarRed() {
+        return follow(follower, startToFarRedShoot());
     }
 
     private Command goToParkFromFarCell() {
-        return follow(follower, parkFromFarRedCell());
+        return follow(follower, farRedCellToPark());
     }
+
+    // ------------
+    // AutoRoutine
+    // ------------
+    private Command autoRoutine(){
+        return sequential(
+                goToFarRed(),
+
+                goToParkFromFarCell()
+        );
+    }
+
+
 
 
     @Override
@@ -53,8 +75,8 @@ public class FarRedBaseAuto extends LinearOpMode {
         Scheduler.reset();
         follower = Constants.create(hardwareMap);
         robot = new Robot(hardwareMap);
-        follower.setPose(startPose);
-        Scheduler.schedule(goToFar(), goToParkFromFarCell());
+        follower.setPose(startPos);
+        Scheduler.schedule(autoRoutine());
         waitForStart();
         while (opModeIsActive()) {
             follower.update();

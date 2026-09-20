@@ -54,4 +54,9 @@ public class Intake {
         }
     }
 
+    public void raiseIntakeBar(){
+        //if(gamepad1.)
+
+    }
+
 }

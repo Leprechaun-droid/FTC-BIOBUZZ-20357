@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.RobotContainer;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.Subsystems.Intake;
+import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.Subsystems.Vision;
 
 public class Robot {
@@ -25,12 +27,18 @@ public class Robot {
 
     public Drivetrain drivetrain;
     public Vision vision;
+    public Intake intake;
+    public Shooter shooter;
+
 
 
     public Robot(HardwareMap hardwareMap) {
         drivetrain = new Drivetrain(hardwareMap);
         vision = new Vision(hardwareMap);
+        intake = new Intake(hardwareMap);
+        shooter = new Shooter(hardwareMap);
     }
+
 
 
 
