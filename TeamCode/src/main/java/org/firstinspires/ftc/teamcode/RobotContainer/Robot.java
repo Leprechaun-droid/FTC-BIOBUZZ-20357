@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.RobotContainer;
 
+import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
@@ -21,10 +22,6 @@ public class Robot {
     private Far_Blue_Cell_State farBlueCellState = Far_Blue_Cell_State.NONE;
 
 
-
-
-
-
     public Drivetrain drivetrain;
     public Vision vision;
     public Intake intake;
@@ -37,9 +34,18 @@ public class Robot {
         vision = new Vision(hardwareMap);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap);
+
     }
 
+    //figure out a way to either make the follower public in this file or make follower public in
+    // the op mode files and allow the advanced shoot formula methods to access the robot position
 
+    """
+    public void initFollower(){
+
+    }
+
+    """
 
 
 
