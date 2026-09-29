@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.RobotContainer;
 
+import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.Subsystems.Intake;
+import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.Subsystems.Vision;
 
 public class Robot {
@@ -19,19 +22,30 @@ public class Robot {
     private Far_Blue_Cell_State farBlueCellState = Far_Blue_Cell_State.NONE;
 
 
-
-
-
-
     public Drivetrain drivetrain;
     public Vision vision;
+    public Intake intake;
+    public Shooter shooter;
+
 
 
     public Robot(HardwareMap hardwareMap) {
         drivetrain = new Drivetrain(hardwareMap);
-        vision = new Vision();
+        vision = new Vision(hardwareMap);
+        intake = new Intake(hardwareMap);
+        shooter = new Shooter(hardwareMap);
+
     }
 
+    //figure out a way to either make the follower public in this file or make follower public in
+    // the op mode files and allow the advanced shoot formula methods to access the robot position
+
+    """
+    public void initFollower(){
+
+    }
+
+    """
 
 
 
@@ -57,6 +71,22 @@ public class Robot {
         farBlueCellState = newCellState;
     }
 
+    public Near_Red_Cell_State getNearRedCellState(){
+        return nearRedCellState;
+    }
+
+    public Far_Red_Cell_State getFarRedCellState(){
+        return farRedCellState;
+    }
+
+    public Near_Blue_Cell_State getNearBlueCellState(){
+        return nearBlueCellState;
+    }
+
+    public Far_Blue_Cell_State getFarBlueCellState(){
+        return farBlueCellState;
+    }
+
 
 
 
@@ -64,6 +94,9 @@ public class Robot {
     public void setAlliance(Alliance newAlliance){
         alliance = newAlliance;
     }
+    public Alliance getAlliance(){return alliance;}
+
+
 
 
 }

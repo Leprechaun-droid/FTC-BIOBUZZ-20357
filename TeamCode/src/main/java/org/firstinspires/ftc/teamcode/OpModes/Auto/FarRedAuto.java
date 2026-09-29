@@ -20,10 +20,12 @@ public class FarRedAuto extends LinearOpMode {
     private Robot robot;
     private PoseFactory poseFactory = PoseFactory.degrees();
 
-    private final Pose startPose = poseFactory.of();
+    private final Pose startPos = poseFactory.of(85, 139, 270);
+    private final Pose atFarCell = poseFactory.of(85, 109, 270);
+    private final Pose parkPos = poseFactory.of();
 
-    private Path path_toGardenFromStart(){
-        return Paths.line(startPose, "secondPose").linear(startPose, );
+    private Path fromStartToFarCell(){
+        return Paths.line(startPos, atFarCell).linear(startPos, atFarCell);
     }
 
     //private Command command_toGardenFromStart(){
@@ -52,11 +54,11 @@ public class FarRedAuto extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()){
-
-
-
             follower.update();
             Scheduler.execute();
+
+
+
 
 
 
