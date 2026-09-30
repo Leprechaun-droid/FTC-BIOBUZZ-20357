@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.OpModes.Auto.Base;
 
 import static com.pedropathing.api.Paths.curve;
 import static com.pedropathing.api.Paths.line;
+import static com.pedropathing.ivy.groups.Groups.parallel;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
@@ -57,10 +58,13 @@ public class NearBlueBaseAuto extends LinearOpMode {
     // ------------
     // AutoRoutine
     // ------------
-    private Command autoRoutine(){
+    private Command autoRoutine(Robot.Alliance alliance){
         return sequential(
                 goToNearBlue(),
                 //add shoot
+                //change 1000 to targetRPM
+                robot.vision.useAprilTagsToSetCellState(alliance);
+                robot.shooter.basicShoot(1000);
                 goToParkFromNearCell()
         );
     }
@@ -74,7 +78,8 @@ public class NearBlueBaseAuto extends LinearOpMode {
         follower = Constants.create(hardwareMap);
         robot = new Robot(hardwareMap);
         follower.setPose(startPos);
-        Scheduler.schedule(autoRoutine());
+        robot.setAlliance(Robot.Alliance.BLUE);
+        Scheduler.schedule(autoRoutine(robot.getAlliance()));
         waitForStart();
         while (opModeIsActive()) {
             follower.update();

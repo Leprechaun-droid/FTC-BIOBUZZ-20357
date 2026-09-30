@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes.Auto.Base;
 
 import static com.pedropathing.api.Paths.line;
+import static com.pedropathing.ivy.groups.Groups.parallel;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
@@ -60,6 +61,8 @@ public class FarBlueBaseAuto extends LinearOpMode {
     private Command autoRoutine(){
         return sequential(
                 goToFarBlue(),
+                //put targetRPM as argument in basicShoot
+                robot.shooter.basicShoot();
                 //add shoot
                 goToParkFromFarCell()
         );

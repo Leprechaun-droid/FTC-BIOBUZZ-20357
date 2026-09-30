@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.pedropathing.ivy.Command;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.RobotContainer.Robot;
@@ -11,7 +13,7 @@ public class Shooter {
 
     //CONSTANTS
         //put in actual shooterAngle when designers tells me
-        private double shooterAngle = 0;
+        private double shooterAngle = 25;
         //g is not negative because the negative was put outside of variable value
         private double g = 9.80665;
         //fill in with actual height relative to camera unless I find a way to do it from shooter
@@ -29,36 +31,91 @@ public class Shooter {
         double kRPM = 0;
         //FIND the motor ticks per revolution; find motor first. ask design team what it is
         double TICKS_PER_SHOOTER_MOTOR_REV = 0;
+        //find encoderCPM (
+        private double encoderCPM = 0;
+
+        private double gearRatio = 0;
     //PID Tuning Values
-        private double kP = 0.00;
-        private double kI = 0.00;
-        private double kD = 0.00;
-        //tune based on gravity
-        private double kF = 0.00;
+
+        private double kP, kS, kV;
+
     //Objects
         //put tuning constants in class parameters when I make the PIDController class
-        private DcMotorEx shooterMotor;
+        private DcMotorEx leftShooterMotor;
+        private DcMotorEx rightShooterMotor;
         private Robot robot;
+
+
+
         public Shooter(HardwareMap hardwareMap) {
-            shooterMotor = hardwareMap.get(DcMotorEx.class, "shooterMotor");
+            leftShooterMotor = hardwareMap.get(DcMotorEx.class, "leftShooterMotor");
+            rightShooterMotor = hardwareMap.get(DcMotorEx.class, "rightShooterMotor");
+            leftShooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            rightShooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            leftShooterMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+            rightShooterMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+
+
             robot = new Robot(hardwareMap);
 
 
 
     }
 
+
+        public double getTicksPerSec(){
+            //Check if this is the right Vel
+            return rightShooterMotor.getVelocity();
+
+        }
+
+        public void setShooterMotorPowers(double power){
+            leftShooterMotor.setPower(power);
+            rightShooterMotor.setPower(power);
+        }
+
+        public void emergencyShooterStop(){
+            leftShooterMotor.setPower(0);
+            rightShooterMotor.setPower(0);
+
+        }
+
+
+        public double getRPM(){
+            return (((getTicksPerSec()/encoderCPM) * 60) / gearRatio);
+
+        }
+
+        public void calculateShooterRPM(double targetRPM, double currentRPM){
+            double error = targetRPM - currentRPM;
+            //double check the logic behind this
+            double ff = (kV * targetRPM) * kS;
+            double fb = error * kP;
+            double power = ff + fb;
+
+            setShooterMotorPowers(power);
+
+        }
+
+
+
     // --------------
     // Basic Shooting
     // --------------
 
-    public Command basicShoot(double targetVel){
-        //Vel is inputed as rpm
+    public Command basicShoot(double targetRPM){
+        // Vel is inputted as RPM
         return Command.build()
-                //.setStart(shooterPID.setTargetVel(targetVel))
-                //.setExecute(shooterMotor.setPower(shooterPID.calculate(shooterMotor.getVelocity(), targetVel) * kF))
+                .setStart()
+                .setExecute(() -> {
+                    calculateShooterRPM(targetRPM, getRPM());
+                })
                 //Add a condition for which the command ends (the hive tips or all the color sensors register none)
-                .setDone(() -> )
-                .setEnd(endCondition -> shooterMotor.setPower(0));
+                //figure out what to the acceptable error (in this case 5)
+                .setDone(() -> {
+                    (targetRPM - getRPM()) < 5;
+                })
+                .setEnd(endCondition -> setShooterMotorPowers(0));
     }
 
 
@@ -100,7 +157,8 @@ public class Shooter {
         //fill arguments with disFromCell and heightThreshold
         double targetRPM = calcOptimalTargetRPM(robot.vision.findCellDis(), h);
         double targetVelocity = (targetRPM * TICKS_PER_SHOOTER_MOTOR_REV) / 60;
-        double currentVelocity = shooterMotor.getVelocity();
+        //double check this line with the addition of the dual motors
+        double currentVelocity = leftShooterMotor.getVelocity();
         //replace with actual own PID class; get rid of FTCLib
         //double power = shooterPID.calculate(currentVelocity, targetVelocity) * kF;
         //shooterMotor.setPower(power);
