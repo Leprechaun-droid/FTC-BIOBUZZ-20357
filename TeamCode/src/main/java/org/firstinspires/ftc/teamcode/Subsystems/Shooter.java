@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
+
 import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.RobotContainer.Robot;
@@ -45,18 +48,25 @@ public class Shooter {
         private DcMotorEx rightShooterMotor;
         private Robot robot;
 
+        private Gamepad gamepad1;
+        private Gamepad gamepad2;
 
 
-        public Shooter(HardwareMap hardwareMap) {
+
+        public Shooter(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
             leftShooterMotor = hardwareMap.get(DcMotorEx.class, "leftShooterMotor");
             rightShooterMotor = hardwareMap.get(DcMotorEx.class, "rightShooterMotor");
+
             leftShooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             rightShooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
             leftShooterMotor.setDirection(DcMotorSimple.Direction.REVERSE);
             rightShooterMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
 
             robot = new Robot(hardwareMap);
+            this.gamepad1 = gamepad1;
+            this.gamepad2 = gamepad2;
 
 
 
@@ -112,10 +122,17 @@ public class Shooter {
                 })
                 //Add a condition for which the command ends (the hive tips or all the color sensors register none)
                 //figure out what to the acceptable error (in this case 5)
-                .setDone(() -> {
-                    (targetRPM - getRPM()) < 5;
-                })
+                .setDone(() -> { targetRPM - getRPM()) < 5;})
                 .setEnd(endCondition -> setShooterMotorPowers(0));
+    }
+
+    public void loadAndBasicShoot(){
+        if(gamepad1.right_trigger > 0.1 && gamepad1.left_trigger > 0.1){
+            robot.shooter.basicShoot(1000);
+            //900 is a placeholder
+            robot.intake.fullIntake();
+        }
+
     }
 
 
@@ -134,6 +151,7 @@ public class Shooter {
 
 
 
+    //THIS IS IRRELEVANT FOR THE FIRST COMPETITION. THIS IS A WORK IN PROGRESS.
 
     //make method for calculating distance from cell
     //I'm assuming we're using a dual flywheel, the kind with a wheel on both sides of the ball

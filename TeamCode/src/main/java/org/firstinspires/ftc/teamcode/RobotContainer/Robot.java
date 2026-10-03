@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.RobotContainer;
 
 import com.pedropathing.follower.Follower;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
@@ -27,13 +28,15 @@ public class Robot {
     public Intake intake;
     public Shooter shooter;
 
+    //intake & transfer is 2nd
+    //drive & shoot is 1st
 
 
-    public Robot(HardwareMap hardwareMap) {
+    public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
         drivetrain = new Drivetrain(hardwareMap);
         vision = new Vision(hardwareMap);
-        intake = new Intake(hardwareMap);
-        shooter = new Shooter(hardwareMap);
+        intake = new Intake(hardwareMap, gamepad1, gamepad2);
+        shooter = new Shooter(hardwareMap, gamepad1, gamepad2 );
 
     }
 

@@ -62,6 +62,8 @@ public class NearRedBaseAuto extends LinearOpMode {
         return sequential(
                 goToNearRed(),
                 //add shoot
+                wait(2000),
+                robot.shooter.basicShoot(1000),
                 goToParkFromNearCell()
         );
     }

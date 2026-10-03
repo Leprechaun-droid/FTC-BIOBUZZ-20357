@@ -28,13 +28,22 @@ public class MainDrive extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()){
+
             double vertical = gamepad1.left_stick_y;
             double horizontal = gamepad1.right_stick_x;
             double strafe = gamepad1.left_stick_x;
 
-            if(Math.abs(vertical) + Math.abs(horizontal) + Math.abs(strafe) != 0){
-                robot.drivetrain.updateMotorPowers(vertical, horizontal, strafe);
-            }
+            robot.drivetrain.updateDriveMotorPowers(vertical, horizontal, strafe);
+
+
+
+
+            robot.intake.justFrontIntake();
+            robot.intake.fullEject();
+            robot.intake.justFrontEject();
+            //This is the method for shooting in teleOp
+            robot.shooter.loadAndBasicShoot();
+
 
 
 
@@ -47,6 +56,7 @@ public class MainDrive extends LinearOpMode {
             telemetry.addData("lb_motor_power", robot.drivetrain.getLBMotorPower());
             telemetry.addData("rf_motor_power", robot.drivetrain.getRFMotorPower());
             telemetry.addData("rb_motor_power", robot.drivetrain.getRBMotorPower());
+            telemetry.addData("left_toggler_analog", gamepad1);
 
             //telemetry.addData("robotPose", "%2f, %2f", follower.pose().x(), follower.pose().y());
 

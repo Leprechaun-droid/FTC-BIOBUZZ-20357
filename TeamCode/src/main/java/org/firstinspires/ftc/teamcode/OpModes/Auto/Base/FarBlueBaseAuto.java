@@ -62,7 +62,9 @@ public class FarBlueBaseAuto extends LinearOpMode {
         return sequential(
                 goToFarBlue(),
                 //put targetRPM as argument in basicShoot
-                robot.shooter.basicShoot();
+                //check that wait is an ivy command VVV
+                wait(2000),
+                robot.shooter.basicShoot(),
                 //add shoot
                 goToParkFromFarCell()
         );
