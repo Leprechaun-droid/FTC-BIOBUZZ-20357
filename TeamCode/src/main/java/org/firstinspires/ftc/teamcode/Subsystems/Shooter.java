@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
 
 import com.pedropathing.ivy.Command;
+import com.pedropathing.ivy.CommandBuilder;
+import com.pedropathing.ivy.commands.Commands;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -45,48 +47,43 @@ public class Shooter {
     //Objects
         //put tuning constants in class parameters when I make the PIDController class
         private DcMotorEx leftShooterMotor;
-        private DcMotorEx rightShooterMotor;
-        private Robot robot;
-
-        private Gamepad gamepad1;
-        private Gamepad gamepad2;
-
-
-
-        public Shooter(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
+        //private DcMotorEx rightShooterMotor;
+        private int baseTargetRPM;
+        private Intake intake;
+        Gamepad gamepad2;
+    public Shooter(HardwareMap hardwareMap, Gamepad gamepad2) {
             leftShooterMotor = hardwareMap.get(DcMotorEx.class, "leftShooterMotor");
-            rightShooterMotor = hardwareMap.get(DcMotorEx.class, "rightShooterMotor");
+            //rightShooterMotor = hardwareMap.get(DcMotorEx.class, "rightShooterMotor");
 
             leftShooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            rightShooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            //rightShooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-            leftShooterMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-            rightShooterMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+            leftShooterMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+            //rightShooterMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-
-            robot = new Robot(hardwareMap);
-            this.gamepad1 = gamepad1;
             this.gamepad2 = gamepad2;
 
-
-
+            intake = new Intake(hardwareMap, gamepad2);
     }
+
+    boolean startShooterCondition = gamepad2.right_trigger > 0.1 && gamepad2.left_trigger < 0.1;
+    boolean zeroBaseShootCondition = gamepad2.right_bumper;
 
 
         public double getTicksPerSec(){
             //Check if this is the right Vel
-            return rightShooterMotor.getVelocity();
+            return leftShooterMotor.getVelocity();
 
         }
 
         public void setShooterMotorPowers(double power){
             leftShooterMotor.setPower(power);
-            rightShooterMotor.setPower(power);
+            //rightShooterMotor.setPower(power);
         }
 
         public void emergencyShooterStop(){
             leftShooterMotor.setPower(0);
-            rightShooterMotor.setPower(0);
+            //rightShooterMotor.setPower(0);
 
         }
 
@@ -96,10 +93,11 @@ public class Shooter {
 
         }
 
-        public void calculateShooterRPM(double targetRPM, double currentRPM){
-            double error = targetRPM - currentRPM;
+        public void calculateShooterRPM(){
+
+            double error = baseTargetRPM - getRPM();
             //double check the logic behind this
-            double ff = (kV * targetRPM) * kS;
+            double ff = (kV * baseTargetRPM) * kS;
             double fb = error * kP;
             double power = ff + fb;
 
@@ -107,37 +105,42 @@ public class Shooter {
 
         }
 
+        private void setBaseTargetRPM(int targRPMBase){
+            baseTargetRPM = targRPMBase;
+        }
 
 
     // --------------
     // Basic Shooting
     // --------------
 
-    public Command basicShoot(double targetRPM){
-        // Vel is inputted as RPM
-        return Command.build()
-                .setStart()
-                .setExecute(() -> {
-                    calculateShooterRPM(targetRPM, getRPM());
-                })
-                //Add a condition for which the command ends (the hive tips or all the color sensors register none)
-                //figure out what to the acceptable error (in this case 5)
-                .setDone(() -> { targetRPM - getRPM()) < 5;})
-                .setEnd(endCondition -> setShooterMotorPowers(0));
+
+
+    public Command basicShoot(){return Commands.instant(() -> setBaseTargetRPM(1000));}
+    public Command zeroShoot(){return Commands.instant(() -> setBaseTargetRPM(0));}
+
+
+    public void setShooterPower(){
+            leftShooterMotor.setPower(0.46);
     }
 
-    public void loadAndBasicShoot(){
-        if(gamepad1.right_trigger > 0.1 && gamepad1.left_trigger > 0.1){
-            robot.shooter.basicShoot(1000);
-            //900 is a placeholder
-            robot.intake.fullIntake();
+    public void zeroBaseShoot(){
+            leftShooterMotor.setPower(leftShooterMotor.getPower() * 0.98);
+    }
+
+
+    public void shooterDriveUpdate(){
+        if(startShooterCondition){
+            setBaseTargetRPM(1000);
         }
 
+        if(gamepad2.right_bumper){
+            zeroBaseShoot();
+        }
+
+
+
     }
-
-
-
-
 
 
 
@@ -173,8 +176,8 @@ public class Shooter {
 
     public void advancedShoot(){
         //fill arguments with disFromCell and heightThreshold
-        double targetRPM = calcOptimalTargetRPM(robot.vision.findCellDis(), h);
-        double targetVelocity = (targetRPM * TICKS_PER_SHOOTER_MOTOR_REV) / 60;
+        //double targetRPM = calcOptimalTargetRPM(robot.vision.findCellDis(), h);
+        //double targetVelocity = (targetRPM * TICKS_PER_SHOOTER_MOTOR_REV) / 60;
         //double check this line with the addition of the dual motors
         double currentVelocity = leftShooterMotor.getVelocity();
         //replace with actual own PID class; get rid of FTCLib
@@ -182,6 +185,8 @@ public class Shooter {
         //shooterMotor.setPower(power);
 
     }
+
+
 
 
 

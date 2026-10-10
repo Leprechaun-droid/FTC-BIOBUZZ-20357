@@ -61,7 +61,7 @@ public class FarRedBaseAuto extends LinearOpMode {
         return sequential(
                 goToFarRed(),
                 //add shoot
-                robot.shooter.basicShoot(1000),
+                robot.shooter.basicShoot(),
                 goToParkFromFarCell()
         );
     }
@@ -73,7 +73,7 @@ public class FarRedBaseAuto extends LinearOpMode {
     public void runOpMode() {
         Scheduler.reset();
         follower = Constants.create(hardwareMap);
-        robot = new Robot(hardwareMap);
+        robot = new Robot(hardwareMap, gamepad1, gamepad2);
         follower.setPose(startPos);
         Scheduler.schedule(autoRoutine());
         waitForStart();

@@ -64,7 +64,7 @@ public class NearBlueBaseAuto extends LinearOpMode {
                 //add shoot
                 //change 1000 to targetRPM
                 //robot.vision.useAprilTagsToSetCellState(alliance),
-                robot.shooter.basicShoot(1000),
+                robot.shooter.basicShoot(),
                 goToParkFromNearCell()
         );
     }
@@ -76,7 +76,7 @@ public class NearBlueBaseAuto extends LinearOpMode {
     public void runOpMode() {
         Scheduler.reset();
         follower = Constants.create(hardwareMap);
-        robot = new Robot(hardwareMap);
+        robot = new Robot(hardwareMap, gamepad1, gamepad2);
         follower.setPose(startPos);
         robot.setAlliance(Robot.Alliance.BLUE);
         Scheduler.schedule(autoRoutine(robot.getAlliance()));

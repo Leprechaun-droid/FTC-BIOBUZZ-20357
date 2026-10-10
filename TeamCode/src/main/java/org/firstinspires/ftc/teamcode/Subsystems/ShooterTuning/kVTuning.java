@@ -5,57 +5,35 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.RobotContainer.Robot;
 
+//@Configurable
 @TeleOp
 public class kVTuning extends LinearOpMode {
 
 
 
-    private double kV = 0;
-    //replace with
-    private double kS = 0;
-
-    private double[] increments = {0.00001, 0.0001, 0.001, 0.01};
-
-    double incrementIDX = 4;
-    int goalRPM;
+    private static double kV = 0;
+    //replace with tuned values
+    private static double kS = 0;
 
 
-    double currentStep = increments[incrementIDX];
+    private static int goalRPM;
 
 
     public void runOpMode(){
-        Robot robot = new Robot(hardwareMap);
+        Robot robot = new Robot(hardwareMap, gamepad1, gamepad2);
 
         waitForStart();
 
 
         while(opModeIsActive()){
 
-            if(gamepad1.dpadLeftWasPressed() & incrementIDX < 4){
-                incrementIDX++;
-            }
-            if(gamepad1.dpadRightWasPressed() & incrementIDX > 0){
-                incrementIDX--;
-            }
-
-            if(gamepad1.a){
-                //may need to change this
-                goalRPM = 1500;
-            }
-            if(gamepad1.b){
-                //may need to change this
-                goalRPM = 800;
-            }
-
-            if(gamepad1.dpadUpWasPressed()){kV += currentStep};
-            if(gamepad1.dpadDownWasPressed()){kV -= currentStep};
 
             double power = (kV * goalRPM) * kS;
 
             robot.shooter.setShooterMotorPowers(power);
 
-            telemetry.addData("currentStep: ", "%.6f", currentStep);
             telemetry.addData("kV: ", "%.6f", kV);
+            telemetry.addData("TargetRPM", goalRPM);
             telemetry.addData("currentRPM: ", robot.shooter.getRPM());
             telemetry.addData("ticksPerSec", robot.shooter.getTicksPerSec());
             telemetry.update();

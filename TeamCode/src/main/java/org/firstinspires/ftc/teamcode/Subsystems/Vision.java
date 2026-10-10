@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 import static org.firstinspires.ftc.teamcode.RobotContainer.Robot.Alliance.BLUE;
@@ -7,6 +9,7 @@ import static org.firstinspires.ftc.teamcode.RobotContainer.Robot.Alliance.BLUE;
 import android.graphics.Color;
 import android.util.Size;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
@@ -25,7 +28,7 @@ import org.firstinspires.ftc.vision.opencv.ImageRegion;
 import java.util.List;
 
 
-
+/*
 public class Vision {
 
     //UPDATE OUTLINE AFTER EVERY COMMIT
@@ -43,8 +46,8 @@ public class Vision {
 
 
     private Robot robot;
-    public Vision(HardwareMap hardwareMap){
-        robot = new Robot(hardwareMap);
+    public Vision(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2){
+        robot = new Robot(hardwareMap, gamepad1, gamepad2);
     }
 
 
@@ -83,8 +86,8 @@ public class Vision {
 
 
     //choose best distanceUnit
-    private Position cameraPosition = new Position(DistanceUnit.INCH,cameraXOffset, cameraYOffset, cameraZOffset, 0);
-    private YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES, cameraYaw, cameraPitch, cameraRoll, 0);
+    //private Position cameraPosition = new Position(DistanceUnit.INCH,cameraXOffset, cameraYOffset, cameraZOffset, 0);
+    //private YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES, cameraYaw, cameraPitch, cameraRoll, 0);
 
 
 
@@ -174,7 +177,7 @@ public class Vision {
                 //.setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
                 //.setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
                 //.setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
-                .setCameraPose(cameraPosition, cameraOrientation)
+                //.setCameraPose(cameraPosition, cameraOrientation)
 
                 // == CAMERA CALIBRATION ==
                 // If you do not manually specify calibration parameters, the SDK will attempt
@@ -204,7 +207,7 @@ public class Vision {
 
         if(USE_WEBCAM){
             //put whatever configuration name we end up using for the camera here
-            builder.setCamera("Webcam 1");
+            //builder.setCamera("Webcam 1");
         } else {
             //may not work because we dont have a camera phone, check if this is still valid
             builder.setCamera(BuiltinCameraDirection.BACK);
@@ -235,11 +238,11 @@ public class Vision {
 
 
     // may remove the Alliance parameter, right now it only exists to filter out the blue side aprilTags
-    /*
+
     could also change it to enum. could put enum definition in Robot Hub file and change it each opMode
      I wouldn't need the parameter then if it was public and global across all files, I could just access the updated
      value here
-    */
+
 
     //may have to put this method in a separate class. It is so large.
     public void useAprilTagsToSetCellState(Robot.Alliance alliance){
@@ -250,10 +253,10 @@ public class Vision {
 
         switch(alliance){
             case RED:
-                /*
-                figure out how to configure this so it does not divide by 0 or an undefined variable
-                if it does not detect any aprilTags
-                */
+
+                //figure out how to configure this so it does not divide by 0 or an undefined variable
+                //if it does not detect any aprilTags
+
                 double sumFarRedCellHeight = 0;
                 double sumNearRedCellHeight = 0;
                 double numOfNearRedCellTags = 0;
@@ -282,10 +285,10 @@ public class Vision {
                 }
 
             case BLUE:
-                /*
-                figure out how to configure this so it does not divide by 0 or an undefined variable
-                if it does not detect any aprilTags
-                */
+
+                //figure out how to configure this so it does not divide by 0 or an undefined variable
+                //if it does not detect any aprilTags
+
                 double sumFarBlueCellHeight = 0;
                 double sumNearBlueCellHeight = 0;
                 double numOfNearBlueCellTags = 0;
@@ -331,19 +334,19 @@ public class Vision {
 
         List<AprilTagDetection> cellDetections;
 
-        for(AprilTagDetection d : currentDetections){
-            if((d == AprTag1) || (d == AprTag2) || (d == AprTag3) || (d == AprTag4)){
-                cellDetections.add(d);
-            } else{
-                //leave blank; should do nothing with the rest
-            }
-        }
+        //for(AprilTagDetection d : currentDetections){
+        //    if((d == AprTag1) || (d == AprTag2) || (d == AprTag3) || (d == AprTag4)){
+        //        cellDetections.add(d);
+        //    } else{
+        //        //leave blank; should do nothing with the rest
+        //    }
+        //}
 
-            for(AprilTagDetection d : cellDetections) {
-                sumX += d.ftcPose.x;
-                sumY += d.ftcPose.y;
-                numAprTags += 1;
-            }
+            //for(AprilTagDetection d : cellDetections) {
+            //    sumX += d.ftcPose.x;
+            //    sumY += d.ftcPose.y;
+            //    numAprTags += 1;
+            //}
 
         double avgX = 0;
         double avgY = 0;
@@ -359,19 +362,19 @@ public class Vision {
 
 
     }
-    public double getDisFromSpecifiedCell(Robot.Alliance alliance, double robotPosX, double robotPosY){
-        if((alliance == Robot.Alliance.RED) & (robot.getNearRedCellState() == Robot.Near_Red_Cell_State.RAISED)){
-            return findCellDis(34, 35, 36, 37, robotPosX, robotPosY);
-        } else if ((alliance == Robot.Alliance.RED) & (robot.getFarRedCellState() == Robot.Far_Red_Cell_State.RAISED)) {
-            return findCellDis(30, 31, 32, 33, robotPosX, robotPosY);
-        } else if((alliance == Robot.Alliance.BLUE) & (robot.getNearBlueCellState() == Robot.Near_Blue_Cell_State.RAISED)){
-            return findCellDis(38, 39, 40, 41, robotPosX, robotPosY);
-        } else if ((alliance = Robot.Alliance.BLUE) & (robot.getFarBlueCellState() == Robot.Far_Blue_Cell_State.RAISED)) {
-            return findCellDis(42, 43, 44, 45, robotPosX, robotPosY)
-        } else {
-            //nothing
-        }
-    }
+    //public double getDisFromSpecifiedCell(Robot.Alliance alliance, double robotPosX, double robotPosY){
+    //    if((alliance == Robot.Alliance.RED) & (robot.getNearRedCellState() == Robot.Near_Red_Cell_State.RAISED)){
+    //        return findCellDis(34, 35, 36, 37, robotPosX, robotPosY);
+    //    } else if ((alliance == Robot.Alliance.RED) & (robot.getFarRedCellState() == Robot.Far_Red_Cell_State.RAISED)) {
+    //        return findCellDis(30, 31, 32, 33, robotPosX, robotPosY);
+    //    } else if((alliance == Robot.Alliance.BLUE) & (robot.getNearBlueCellState() == Robot.Near_Blue_Cell_State.RAISED)){
+    //        return findCellDis(38, 39, 40, 41, robotPosX, robotPosY);
+    //    } else if ((alliance = Robot.Alliance.BLUE) & (robot.getFarBlueCellState() == Robot.Far_Blue_Cell_State.RAISED)) {
+    //        return findCellDis(42, 43, 44, 45, robotPosX, robotPosY);
+    //    } else {
+    //        //nothing
+    //    }
+    //}
 
 
 
@@ -408,10 +411,10 @@ public class Vision {
     }
 
 
-    /*
-    REMINDER: DO NOT CLOSE VISION PORTAL IN THE MIDDLE OF OPMODE UNLESS PERMANENTLY
-    FINISHED WITH IT. IT WILL CAUSE CPU STRAIN TO CLOSE AND BUILD IT AGAIN.
-     */
+
+    //REMINDER: DO NOT CLOSE VISION PORTAL IN THE MIDDLE OF OPMODE UNLESS PERMANENTLY
+    //FINISHED WITH IT. IT WILL CAUSE CPU STRAIN TO CLOSE AND BUILD IT AGAIN.
+
     public void restVisionPortal(){
         visionPortal.stopStreaming();
     }
@@ -429,7 +432,7 @@ public class Vision {
 
 
 
-    /*
+
     //Check how to get telemetry in a Subsystem class
     public void visionTelemetry(){
 
@@ -438,8 +441,10 @@ public class Vision {
 
 
     }
-    */
+
 
 
 
 }
+
+*/

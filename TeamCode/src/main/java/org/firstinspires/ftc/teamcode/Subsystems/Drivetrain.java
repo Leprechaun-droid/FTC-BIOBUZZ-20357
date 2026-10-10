@@ -17,10 +17,10 @@ public class Drivetrain {
     private double rb_motor_power;
 
     public Drivetrain(HardwareMap hardwareMap){
-        lf_motor = hardwareMap.get(DcMotor.class, "");
-        lb_motor = hardwareMap.get(DcMotor.class, "");
-        rf_motor = hardwareMap.get(DcMotor.class, "");
-        rb_motor = hardwareMap.get(DcMotor.class, "");
+        lf_motor = hardwareMap.get(DcMotor.class, "lf_motor");
+        lb_motor = hardwareMap.get(DcMotor.class, "lb_motor");
+        rf_motor = hardwareMap.get(DcMotor.class, "rf_motor");
+        rb_motor = hardwareMap.get(DcMotor.class, "rb_motor");
 
         lf_motor.setDirection(DcMotorSimple.Direction.REVERSE);
         lb_motor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -37,16 +37,15 @@ public class Drivetrain {
         rb_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
-        //set runMode (with encoder, without encoder, etc.)
     }
 
 
     public void updateDriveMotorPowers(double vertical, double horizontal, double strafe){
 
-        absTotalPower = Math.max(Math.abs(vertical) + Math.abs(horizontal) + Math.abs(strafe), 1);
+        absTotalPower = Math.max((Math.abs(vertical) + Math.abs(horizontal) + Math.abs(strafe)), 1);
         lf_motor_power = -vertical + horizontal + strafe;
         lb_motor_power = -vertical + horizontal - strafe;
-        rf_motor_power = -vertical - horizontal + strafe;
+        rf_motor_power = -vertical - horizontal - strafe;
         rb_motor_power = -vertical - horizontal + strafe;
 
         if((Math.abs(vertical) + Math.abs(horizontal) + Math.abs(strafe)) != 0) {

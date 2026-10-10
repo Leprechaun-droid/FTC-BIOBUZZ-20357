@@ -4,63 +4,62 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.RobotContainer.Robot;
+import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.Subsystems.Turret;
 
+// @Config add ftcdashboard
 @TeleOp
 public class kPTuning extends LinearOpMode {
 
 
-    private double kV = 0.01;
-    //replace with
-    private double kS = 0;
-    private double kP = 0;
 
-    private double[] increments = {0.00001, 0.0001, 0.001, 0.01};
+    public static double kV = 0.01;
+    public static double kS = 0;
+    public static double kP = 0;
 
-    double incrementIDX = 4;
-    int goalRPM;
+    public static int goalRPM = 0;
+
+    private Shooter shooter;
+    private Turret turret;
+    private enum tuningMode{SHOOTER, TURRET, NONE}
+    tuningMode currentTuningMode = tuningMode.NONE;
 
 
-    double currentStep = increments[incrementIDX];
+
 
 
     public void runOpMode(){
-        Robot robot = new Robot(hardwareMap);
+        shooter = new Shooter(hardwareMap, gamepad2);
+        turret = new Turret(hardwareMap);
+        while(true){
+            if(gamepad1.dpadLeftWasPressed()){
+                currentTuningMode = tuningMode.SHOOTER;
+                break;
+            } else if (gamepad1.dpadRightWasPressed()){
+                currentTuningMode = tuningMode.TURRET;
+                break;
+            }
 
+        }
         waitForStart();
-
-
         while(opModeIsActive()){
+            if(currentTuningMode == tuningMode.SHOOTER) {
+                double feedForward = (kV * goalRPM) * kS;
+                double error = goalRPM - shooter.getRPM();
+                double feedBack = error * kP;
+                double power = feedForward * feedBack;
 
-            if(gamepad1.dpadLeftWasPressed() & incrementIDX < 4){
-                incrementIDX++;
-            }
-            if(gamepad1.dpadRightWasPressed() & incrementIDX > 0){
-                incrementIDX--;
-            }
+                shooter.setShooterMotorPowers(power);
+            } else if (currentTuningMode == tuningMode.TURRET){
+                double feedBack = 0;
+                //add logic for turret tuning
 
-            if(gamepad1.a){
-                //may need to change this
-                goalRPM = 1500;
-            }
-            if(gamepad1.b){
-                //may need to change this
-                goalRPM = 800;
             }
 
-            if(gamepad1.dpadUpWasPressed()){kV += currentStep};
-            if(gamepad1.dpadDownWasPressed()){kV -= currentStep};
-
-            double feedForward = (kV * goalRPM) * kS;
-            double error = goalRPM - robot.shooter.getRPM();
-            double feedBack = error * kP;
-            double power = feedForward * feedBack;
-
-            robot.shooter.setShooterMotorPowers(power);
-
-            telemetry.addData("currentStep: ", "%.6f", currentStep);
-            telemetry.addData("kV: ", "%.6f", kV);
-            telemetry.addData("currentRPM: ", robot.shooter.getRPM());
-            telemetry.addData("ticksPerSec", robot.shooter.getTicksPerSec());
+            telemetry.addData("TuningMode", currentTuningMode);
+            telemetry.addData("kV: ", "%.6f", kP);
+            telemetry.addData("currentRPM: ", shooter.getRPM());
+            telemetry.addData("ticksPerSec", shooter.getTicksPerSec());
             telemetry.update();
 
         }
