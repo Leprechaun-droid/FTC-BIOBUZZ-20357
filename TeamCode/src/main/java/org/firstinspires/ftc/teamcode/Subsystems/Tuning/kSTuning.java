@@ -1,13 +1,12 @@
-package org.firstinspires.ftc.teamcode.Subsystems.ShooterTuning;
+package org.firstinspires.ftc.teamcode.Subsystems.Tuning;
 
-import com.acmerobotics.dashboard.config.Config;
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.RobotContainer.Robot;
 
-
-@Config
+@Configurable
 @TeleOp
 public class kSTuning extends LinearOpMode {
 

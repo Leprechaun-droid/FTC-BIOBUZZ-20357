@@ -1,9 +1,8 @@
-package org.firstinspires.ftc.teamcode.Subsystems.ShooterTuning;
+package org.firstinspires.ftc.teamcode.Subsystems.Tuning;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.RobotContainer.Robot;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.Subsystems.Turret;
 

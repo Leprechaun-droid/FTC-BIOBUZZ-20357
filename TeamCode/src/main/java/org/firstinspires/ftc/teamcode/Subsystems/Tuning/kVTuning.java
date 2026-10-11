@@ -1,11 +1,12 @@
-package org.firstinspires.ftc.teamcode.Subsystems.ShooterTuning;
+package org.firstinspires.ftc.teamcode.Subsystems.Tuning;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.RobotContainer.Robot;
 
-//@Configurable
+@Configurable
 @TeleOp
 public class kVTuning extends LinearOpMode {
 
@@ -33,9 +34,10 @@ public class kVTuning extends LinearOpMode {
             robot.shooter.setShooterMotorPowers(power);
 
             telemetry.addData("kV: ", "%.6f", kV);
-            telemetry.addData("TargetRPM", goalRPM);
+            telemetry.addData("TargetRPM: ", goalRPM);
             telemetry.addData("currentRPM: ", robot.shooter.getRPM());
-            telemetry.addData("ticksPerSec", robot.shooter.getTicksPerSec());
+            telemetry.addData("ticksPerSec: ", robot.shooter.getTicksPerSec());
+            telemetry.addData("Power: ", power);
             telemetry.update();
 
         }
