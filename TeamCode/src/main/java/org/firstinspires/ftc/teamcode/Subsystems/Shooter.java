@@ -46,19 +46,19 @@ public class Shooter {
 
     //Objects
         //put tuning constants in class parameters when I make the PIDController class
-        private DcMotorEx leftShooterMotor;
+        private DcMotorEx shooterMotor;
         //private DcMotorEx rightShooterMotor;
         private int baseTargetRPM;
         private Intake intake;
         Gamepad gamepad2;
     public Shooter(HardwareMap hardwareMap, Gamepad gamepad2) {
-            leftShooterMotor = hardwareMap.get(DcMotorEx.class, "leftShooterMotor");
+            shooterMotor = hardwareMap.get(DcMotorEx.class, "leftShooterMotor");
             //rightShooterMotor = hardwareMap.get(DcMotorEx.class, "rightShooterMotor");
 
-            leftShooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            shooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             //rightShooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-            leftShooterMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+            shooterMotor.setDirection(DcMotorSimple.Direction.FORWARD);
             //rightShooterMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
             this.gamepad2 = gamepad2;
@@ -66,23 +66,23 @@ public class Shooter {
             intake = new Intake(hardwareMap, gamepad2);
     }
 
-    boolean startShooterCondition = gamepad2.right_trigger > 0.1 && gamepad2.left_trigger < 0.1;
+    boolean startShooterCondition = (gamepad2.right_trigger > 0.1) && (gamepad2.left_trigger < 0.1);
     boolean zeroBaseShootCondition = gamepad2.right_bumper;
 
 
         public double getTicksPerSec(){
             //Check if this is the right Vel
-            return leftShooterMotor.getVelocity();
+            return shooterMotor.getVelocity();
 
         }
 
         public void setShooterMotorPowers(double power){
-            leftShooterMotor.setPower(power);
+            shooterMotor.setPower(power);
             //rightShooterMotor.setPower(power);
         }
 
         public void emergencyShooterStop(){
-            leftShooterMotor.setPower(0);
+            shooterMotor.setPower(0);
             //rightShooterMotor.setPower(0);
 
         }
@@ -121,11 +121,11 @@ public class Shooter {
 
 
     public void setShooterPower(){
-            leftShooterMotor.setPower(0.46);
+            shooterMotor.setPower(0.46);
     }
 
     public void zeroBaseShoot(){
-            leftShooterMotor.setPower(leftShooterMotor.getPower() * 0.98);
+            shooterMotor.setPower(shooterMotor.getPower() * 0.98);
     }
 
 
@@ -179,7 +179,7 @@ public class Shooter {
         //double targetRPM = calcOptimalTargetRPM(robot.vision.findCellDis(), h);
         //double targetVelocity = (targetRPM * TICKS_PER_SHOOTER_MOTOR_REV) / 60;
         //double check this line with the addition of the dual motors
-        double currentVelocity = leftShooterMotor.getVelocity();
+        double currentVelocity = shooterMotor.getVelocity();
         //replace with actual own PID class; get rid of FTCLib
         //double power = shooterPID.calculate(currentVelocity, targetVelocity) * kF;
         //shooterMotor.setPower(power);

@@ -1,15 +1,15 @@
 package org.firstinspires.ftc.teamcode.Subsystems.Tuning;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.Subsystems.Turret;
 
-// @Config add ftcdashboard
+@Configurable
 @TeleOp
 public class kPTuning extends LinearOpMode {
-
 
 
     public static double kV = 0.01;
@@ -55,8 +55,8 @@ public class kPTuning extends LinearOpMode {
 
             }
 
-            telemetry.addData("TuningMode", currentTuningMode);
-            telemetry.addData("kV: ", "%.6f", kP);
+            telemetry.addData("TuningMode: ", currentTuningMode);
+            telemetry.addData("kP: ", "%.6f", kP);
             telemetry.addData("currentRPM: ", shooter.getRPM());
             telemetry.addData("ticksPerSec", shooter.getTicksPerSec());
             telemetry.update();

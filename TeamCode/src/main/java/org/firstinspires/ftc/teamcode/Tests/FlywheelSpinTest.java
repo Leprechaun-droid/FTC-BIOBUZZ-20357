@@ -17,7 +17,7 @@ public class FlywheelSpinTest extends LinearOpMode {
 
     @Override
     public void runOpMode(){
-        flywheel = hardwareMap.get(DcMotor.class, "leftShooterMotor");
+        flywheel = hardwareMap.get(DcMotor.class, "shooterMotor");
         flywheel.setDirection(DcMotorSimple.Direction.REVERSE);
         flywheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //might change later

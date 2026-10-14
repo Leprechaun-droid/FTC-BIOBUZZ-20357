@@ -28,7 +28,7 @@ import org.firstinspires.ftc.vision.opencv.ImageRegion;
 import java.util.List;
 
 
-/*
+
 public class Vision {
 
     //UPDATE OUTLINE AFTER EVERY COMMIT
@@ -239,9 +239,9 @@ public class Vision {
 
     // may remove the Alliance parameter, right now it only exists to filter out the blue side aprilTags
 
-    could also change it to enum. could put enum definition in Robot Hub file and change it each opMode
-     I wouldn't need the parameter then if it was public and global across all files, I could just access the updated
-     value here
+    //could also change it to enum. could put enum definition in Robot Hub file and change it each opMode
+    // I wouldn't need the parameter then if it was public and global across all files, I could just access the updated
+    // value here
 
 
     //may have to put this method in a separate class. It is so large.
@@ -377,7 +377,7 @@ public class Vision {
     //}
 
 
-
+    //EVERYTHING AFTER SEEMS FINE, MAY NEED TO UPDATE PROCESSORS
 
 
     public void enableAprilTag(){
@@ -430,21 +430,5 @@ public class Vision {
 
 
 
-
-
-
-    //Check how to get telemetry in a Subsystem class
-    public void visionTelemetry(){
-
-        telemetry.addData("Current Alliance: ", robot.getAlliance());
-        tel
-
-
-    }
-
-
-
-
 }
 
-*/
