@@ -84,7 +84,7 @@ import java.util.concurrent.TimeUnit;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  *
  */
-
+/*
 @TeleOp(name="Omni Drive To AprilTag", group = "Concept")
 @Disabled
 public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
@@ -224,7 +224,7 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
      * Positive Y is strafe left
      * <p>
      * Positive Yaw is counter-clockwise
-     */
+
     public void moveRobot(double x, double y, double yaw) {
         // Calculate wheel powers.
         double frontLeftPower    =  x - y - yaw;
@@ -251,9 +251,9 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
         backRightDrive.setPower(backRightPower);
     }
 
-    /**
-     * Initialize the AprilTag processor.
-     */
+     //**
+     //* Initialize the AprilTag processor.
+     //
     private void initAprilTag() {
         // Create the AprilTag processor by using a builder.
         aprilTag = new AprilTagProcessor.Builder().build();
@@ -281,10 +281,10 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
         }
     }
 
-    /*
-     Manually set the camera gain and exposure.
-     This can only be called AFTER calling initAprilTag(), and only works for Webcams;
-    */
+
+    // Manually set the camera gain and exposure.
+    // This can only be called AFTER calling initAprilTag(), and only works for Webcams;
+
     private void    setManualExposure(int exposureMS, int gain) {
         // Wait for the camera to be open, then use the controls
 
@@ -319,3 +319,4 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
         }
     }
 }
+*/
