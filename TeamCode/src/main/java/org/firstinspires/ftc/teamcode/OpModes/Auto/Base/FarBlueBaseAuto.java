@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.OpModes.Auto.Base;
 
 import static com.pedropathing.api.Paths.line;
+import static com.pedropathing.ivy.commands.Commands.waitMs;
+import static com.pedropathing.ivy.groups.Groups.parallel;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
@@ -59,8 +61,16 @@ public class FarBlueBaseAuto extends LinearOpMode {
     // ------------
     private Command autoRoutine(){
         return sequential(
+
+                //go to Far blue shooting pos or start there
+                //hive is always tipped up on far blue, so I don't need to check aprilTags
+                //shoot
+                //go to park
+
                 goToFarBlue(),
-                //add shoot
+                robot.shooter.basicShoot(),
+                //Repeat 4 times
+                    //if a certain RPM margin of error is reached, load a ball for shooting
                 goToParkFromFarCell()
         );
     }
@@ -72,12 +82,15 @@ public class FarBlueBaseAuto extends LinearOpMode {
     public void runOpMode() {
         Scheduler.reset();
         follower = Constants.create(hardwareMap);
-        robot = new Robot(hardwareMap);
+        robot = new Robot(hardwareMap, gamepad1, gamepad2);
         follower.setPose(startPos);
         Scheduler.schedule(autoRoutine());
         waitForStart();
+
+
         while (opModeIsActive()) {
             follower.update();
+            robot.shooter.calculateShooterRPM();
             Scheduler.execute();
 
             telemetry.update();

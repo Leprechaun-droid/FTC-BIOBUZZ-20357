@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.OpModes.Auto;
 
+import static com.pedropathing.ivy.groups.Groups.sequential;
+import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
 import com.pedropathing.api.Paths;
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
 import com.pedropathing.math.Pose;
 import com.pedropathing.paths.Path;
@@ -20,17 +23,33 @@ public class FarRedAuto extends LinearOpMode {
     private Robot robot;
     private PoseFactory poseFactory = PoseFactory.degrees();
 
-    private final Pose startPos = poseFactory.of(85, 139, 270);
-    private final Pose atFarCell = poseFactory.of(85, 109, 270);
-    private final Pose parkPos = poseFactory.of();
+    private final Pose startPos = poseFactory.of(85, 133, 270);
+    private final Pose atFarCell = poseFactory.of(85, 100, 270);
+    private final Pose farCellToParkControl = poseFactory.of(133, 112, 0);
+    private final Pose parkPos = poseFactory.of(133, 43, 270);
 
     private Path fromStartToFarCell(){
         return Paths.line(startPos, atFarCell).linear(startPos, atFarCell);
     }
 
-    //private Command command_toGardenFromStart(){
-    //    return follow(follower, path_toGardenFromStart());
-    //}
+    private Path farCellToPark(){
+        return Paths.curve(atFarCell, farCellToParkControl, parkPos).linear(atFarCell, parkPos);
+    }
+
+    private Command goToFarCell(){
+        return follow(follower, fromStartToFarCell());
+    }
+
+    private Command goToPark(){
+        return follow(follower, farCellToPark());
+    }
+
+    private Command autoRoutine(){
+        return sequential(goToFarCell(),
+                robot.shooter.basicShoot(),
+                goToPark()
+        );
+    }
 
 
 
@@ -39,7 +58,7 @@ public class FarRedAuto extends LinearOpMode {
 
     @Override
     public void runOpMode(){
-        robot = new Robot(hardwareMap);
+        robot = new Robot(hardwareMap, gamepad1, gamepad2);
 
 
         robot.setAlliance(Robot.Alliance.RED);
@@ -48,8 +67,8 @@ public class FarRedAuto extends LinearOpMode {
         follower = Constants.create(hardwareMap);
         //aprilTag for startPos must go before buildPaths, or buildPaths will have no values for startPos
         //set startPos manually if using AprilTags to check will not be allowed
-        //follower.setPose(startPos);
-        Scheduler.schedule();
+        follower.setPose(startPos);
+        Scheduler.schedule(autoRoutine());
 
 
         waitForStart();
@@ -68,7 +87,9 @@ public class FarRedAuto extends LinearOpMode {
 
 
 
-
+            telemetry.addData("PosX", follower.pose().x());
+            telemetry.addData("PosY", follower.pose().y());
+            telemetry.addData("Heading", follower.pose().heading());
 
             telemetry.update();
         }

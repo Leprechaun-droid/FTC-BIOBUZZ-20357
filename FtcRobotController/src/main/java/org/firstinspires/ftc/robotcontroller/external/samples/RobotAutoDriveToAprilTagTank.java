@@ -84,6 +84,7 @@ import java.util.concurrent.TimeUnit;
  *
  */
 
+/*
 @TeleOp(name="Tank Drive To AprilTag", group = "Concept")
 @Disabled
 public class RobotAutoDriveToAprilTagTank extends LinearOpMode
@@ -202,13 +203,13 @@ public class RobotAutoDriveToAprilTagTank extends LinearOpMode
         }
     }
 
-    /**
-     * Move robot according to desired axes motions
-     * <p>
-     * Positive X is forward
-     * <p>
-     * Positive Yaw is counter-clockwise
-     */
+
+    // * Move robot according to desired axes motions
+    // * <p>
+    // * Positive X is forward
+    // * <p>
+    // * Positive Yaw is counter-clockwise
+     //
     public void moveRobot(double x, double yaw) {
         // Calculate left and right wheel powers.
         double leftPower    = x - yaw;
@@ -226,9 +227,9 @@ public class RobotAutoDriveToAprilTagTank extends LinearOpMode
         rightDrive.setPower(rightPower);
     }
 
-    /**
-     * Initialize the AprilTag processor.
-     */
+
+     //* Initialize the AprilTag processor.
+
     private void initAprilTag() {
         // Create the AprilTag processor by using a builder.
         aprilTag = new AprilTagProcessor.Builder().build();
@@ -256,10 +257,10 @@ public class RobotAutoDriveToAprilTagTank extends LinearOpMode
         }
     }
 
-    /*
-     Manually set the camera gain and exposure.
-     This can only be called AFTER calling initAprilTag(), and only works for Webcams;
-    */
+
+    // Manually set the camera gain and exposure.
+    // This can only be called AFTER calling initAprilTag(), and only works for Webcams;
+
     private void    setManualExposure(int exposureMS, int gain) {
         // Wait for the camera to be open, then use the controls
 
@@ -296,3 +297,4 @@ public class RobotAutoDriveToAprilTagTank extends LinearOpMode
         }
     }
 }
+*/

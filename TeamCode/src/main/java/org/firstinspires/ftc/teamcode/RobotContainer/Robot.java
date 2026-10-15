@@ -1,12 +1,15 @@
 package org.firstinspires.ftc.teamcode.RobotContainer;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.math.Pose;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.Subsystems.Vision;
+//import org.firstinspires.ftc.teamcode.Subsystems.Vision;
+import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 public class Robot {
 
@@ -21,39 +24,39 @@ public class Robot {
     private Near_Blue_Cell_State nearBlueCellState = Near_Blue_Cell_State.NONE;
     private Far_Blue_Cell_State farBlueCellState = Far_Blue_Cell_State.NONE;
 
+    //public Follower follower;
+
 
     public Drivetrain drivetrain;
-    public Vision vision;
+    //public Vision vision;
     public Intake intake;
     public Shooter shooter;
 
+    //intake & transfer is 2nd
+    //drive & shoot is 1st
 
 
-    public Robot(HardwareMap hardwareMap) {
+    private int fullIntakeConditionRPM = 0;
+
+    Gamepad gamepad1;
+    Gamepad gamepad2;
+
+
+    public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
+        this.gamepad1 = gamepad1;
+        this.gamepad2 = gamepad2;
+
         drivetrain = new Drivetrain(hardwareMap);
-        vision = new Vision(hardwareMap);
-        intake = new Intake(hardwareMap);
-        shooter = new Shooter(hardwareMap);
+        //vision = new Vision(hardwareMap, gamepad1, gamepad2);
+        intake = new Intake(hardwareMap, gamepad2);
+        shooter = new Shooter(hardwareMap, gamepad2);
+
+
 
     }
 
     //figure out a way to either make the follower public in this file or make follower public in
     // the op mode files and allow the advanced shoot formula methods to access the robot position
-
-    """
-    public void initFollower(){
-
-    }
-
-    """
-
-
-
-
-
-
-
-
 
 
 
@@ -96,7 +99,10 @@ public class Robot {
     }
     public Alliance getAlliance(){return alliance;}
 
-
+    //public void initRobotFollower(HardwareMap hardwareMap, Pose startPos){
+    //    follower = Constants.create(hardwareMap);
+    //    follower.setPose(startPos);
+    //}
 
 
 }
