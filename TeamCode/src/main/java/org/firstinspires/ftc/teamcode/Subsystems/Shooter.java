@@ -18,9 +18,9 @@ public class Shooter {
 
     //CONSTANTS
         //put in actual shooterAngle when designers tells me
-        private double shooterAngle = 25;
+        private final double shooterAngle = 25;
         //g is not negative because the negative was put outside of variable value
-        private double g = 9.80665;
+        private final double g = 9.80665;
         //fill in with actual height relative to camera unless I find a way to do it from shooter
         //believe I put a heightThreshold variable in the vision class. can use that to define h.
 
@@ -28,10 +28,10 @@ public class Shooter {
         // plugging in 43 for now. It is the number I measured from the ground to a midpoint between
         // the displacement of the top and bottom cell; need to measure the distance from the camera to the ground and subtract it from this
         // because the camera measures the apriltag's height from the camera, not the ground
-        private double h = 43;
+        private final double h = 43;
         //fill in with actual diameter
 
-        private double flywheelDiameter = 0;
+        private final double flywheelDiameter = 0;
         //adjust (usually a little larger than 1, like 1.1) to account for loss of KE from flywheel to ball
         double kRPM = 0;
         //FIND the motor ticks per revolution; find motor first. ask design team what it is
