@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 //import org.firstinspires.ftc.teamcode.Subsystems.Vision;
+import org.firstinspires.ftc.teamcode.Subsystems.Vision;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 public class Robot {
@@ -28,7 +29,7 @@ public class Robot {
 
 
     public Drivetrain drivetrain;
-    //public Vision vision;
+    public Vision vision;
     public Intake intake;
     public Shooter shooter;
 
@@ -36,20 +37,13 @@ public class Robot {
     //drive & shoot is 1st
 
 
-    private int fullIntakeConditionRPM = 0;
 
-    Gamepad gamepad1;
-    Gamepad gamepad2;
-
-
-    public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
-        this.gamepad1 = gamepad1;
-        this.gamepad2 = gamepad2;
+    public Robot(HardwareMap hardwareMap) {
 
         drivetrain = new Drivetrain(hardwareMap);
-        //vision = new Vision(hardwareMap, gamepad1, gamepad2);
-        intake = new Intake(hardwareMap, gamepad2);
-        shooter = new Shooter(hardwareMap, gamepad2);
+        vision = new Vision(hardwareMap);
+        intake = new Intake(hardwareMap);
+        shooter = new Shooter(hardwareMap);
 
 
 

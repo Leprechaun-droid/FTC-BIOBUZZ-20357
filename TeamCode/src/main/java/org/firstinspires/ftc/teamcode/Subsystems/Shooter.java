@@ -50,24 +50,18 @@ public class Shooter {
         //private DcMotorEx rightShooterMotor;
         private int baseTargetRPM;
         private Intake intake;
-        Gamepad gamepad2;
-    public Shooter(HardwareMap hardwareMap, Gamepad gamepad2) {
+    public Shooter(HardwareMap hardwareMap) {
             shooterMotor = hardwareMap.get(DcMotorEx.class, "leftShooterMotor");
-            //rightShooterMotor = hardwareMap.get(DcMotorEx.class, "rightShooterMotor");
 
             shooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            //rightShooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
             shooterMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-            //rightShooterMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-            this.gamepad2 = gamepad2;
+            shooterMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-            intake = new Intake(hardwareMap, gamepad2);
     }
 
-    boolean startShooterCondition = (gamepad2.right_trigger > 0.1) && (gamepad2.left_trigger < 0.1);
-    boolean zeroBaseShootCondition = gamepad2.right_bumper;
+
 
 
         public double getTicksPerSec(){
@@ -78,12 +72,10 @@ public class Shooter {
 
         public void setShooterMotorPowers(double power){
             shooterMotor.setPower(power);
-            //rightShooterMotor.setPower(power);
         }
 
         public void emergencyShooterStop(){
             shooterMotor.setPower(0);
-            //rightShooterMotor.setPower(0);
 
         }
 
@@ -105,9 +97,6 @@ public class Shooter {
 
         }
 
-        private void setBaseTargetRPM(int targRPMBase){
-            baseTargetRPM = targRPMBase;
-        }
 
 
     // --------------
@@ -115,32 +104,15 @@ public class Shooter {
     // --------------
 
 
-
+    public void setBaseTargetRPM(int targRPMBase){
+        baseTargetRPM = targRPMBase;
+    }
     public Command basicShoot(){return Commands.instant(() -> setBaseTargetRPM(1000));}
     public Command zeroShoot(){return Commands.instant(() -> setBaseTargetRPM(0));}
 
 
-    public void setShooterPower(){
-            shooterMotor.setPower(0.46);
-    }
-
-    public void zeroBaseShoot(){
-            shooterMotor.setPower(shooterMotor.getPower() * 0.98);
-    }
 
 
-    public void shooterDriveUpdate(){
-        if(startShooterCondition){
-            setBaseTargetRPM(1000);
-        }
-
-        if(gamepad2.right_bumper){
-            zeroBaseShoot();
-        }
-
-
-
-    }
 
 
 

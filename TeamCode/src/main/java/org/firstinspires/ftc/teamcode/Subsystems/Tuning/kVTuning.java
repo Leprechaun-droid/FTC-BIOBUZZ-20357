@@ -17,7 +17,7 @@ public class kVTuning extends LinearOpMode {
     private static double kS = 0;
 
 
-    private static int goalRPM;
+    private static int goalRPM = 0;
 
 
     public void runOpMode(){

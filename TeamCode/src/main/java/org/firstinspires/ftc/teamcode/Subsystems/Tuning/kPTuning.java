@@ -28,7 +28,7 @@ public class kPTuning extends LinearOpMode {
 
 
     public void runOpMode(){
-        shooter = new Shooter(hardwareMap, gamepad2);
+        shooter = new Shooter(hardwareMap);
         turret = new Turret(hardwareMap);
         while(true){
             if(gamepad1.dpadLeftWasPressed()){

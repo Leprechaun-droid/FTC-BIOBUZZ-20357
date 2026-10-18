@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.RobotContainer.DriveProcesses;
 import org.firstinspires.ftc.teamcode.RobotContainer.Robot;
 import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
@@ -13,58 +14,35 @@ public class MainDrive extends LinearOpMode {
 
 
 
-
-
-
-    private int fullIntakeConditionRPM = 0;
-
     private Drivetrain drivetrain;
     private  Intake intake;
     private Shooter shooter;
     private Robot robot;
+    private DriveProcesses driveProcesses;
 
     @Override
     public void runOpMode(){
-        robot = new Robot(hardwareMap, gamepad1,gamepad2);
-        //drivetrain = new Drivetrain(hardwareMap);
-        //intake = new Intake(hardwareMap, gamepad2);
-        //shooter = new Shooter(hardwareMap, gamepad2);
+        robot = new Robot(hardwareMap);
+        driveProcesses = new DriveProcesses(hardwareMap, gamepad1, gamepad2);
 
         double vertical;
         double horizontal;
         double strafe;
 
-
-
         waitForStart();
         while(opModeIsActive()){
-
             vertical = gamepad1.left_stick_y;
             horizontal = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
+
 
             //update PID
             robot.shooter.calculateShooterRPM();
 
             //updateSubsystems
-            robot.intake.intakeDriveUpdate();
-            robot.shooter.shooterDriveUpdate();
+            driveProcesses.intakeDriveUpdate();
+            driveProcesses.shooterDriveUpdate();
             robot.drivetrain.updateDriveMotorPowers(vertical, horizontal, strafe);
-
-
-
-
-
-
-
-            //robot.intake.justFrontIntake();
-            //robot.intake.fullEject();
-            //robot.intake.justFrontEject();
-
-
-            //This is the method for shooting in teleOp
-            //robot.shooter.calculateShooterRPM();
-            //robot.shooter.loadAndBasicShoot();
 
 
 
@@ -88,11 +66,6 @@ public class MainDrive extends LinearOpMode {
 
         }
     }
-
-
-
-
-
 
 
 
