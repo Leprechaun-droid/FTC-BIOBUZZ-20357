@@ -152,7 +152,11 @@ public class Vision {
     }
 
 
-    public void scan(){
+    public void resetScanner(){
+        clusterDet = null;
+    }
+
+    public void scanForClusters(){
         currentDetections = aprilTagProcessor.getDetections();
         for(AprilTagDetection detection : currentDetections){
             if(detection instanceof AprilTagClusterDetection){
@@ -160,6 +164,28 @@ public class Vision {
             }
         }
     }
+
+
+
+    public boolean checkIfStartingClusterRaised(){
+        //if clusterDet != null, returns true; if clusterDet == null, returns false
+        return clusterDet != null;
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -180,6 +206,16 @@ public class Vision {
     }
 
 
+
+
+
+    public AprilTagClusterDetection getCurrentCluster(){
+        return clusterDet;
+    }
+
+
+
+
     //EVERYTHING AFTER SEEMS FINE, MAY NEED TO UPDATE PROCESSORS
 
 
@@ -189,6 +225,15 @@ public class Vision {
     public void disableAprilTag(){
         visionPortal.setProcessorEnabled(aprilTagProcessor, false);
     }
+
+
+
+
+
+
+
+
+
 
     /*
 

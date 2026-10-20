@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
 //import org.firstinspires.ftc.teamcode.Subsystems.Vision;
+import org.firstinspires.ftc.teamcode.Subsystems.Turret;
 import org.firstinspires.ftc.teamcode.Subsystems.Vision;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
@@ -32,6 +33,7 @@ public class Robot {
     public Vision vision;
     public Intake intake;
     public Shooter shooter;
+    public Turret turret;
 
     //intake & transfer is 2nd
     //drive & shoot is 1st
@@ -44,7 +46,7 @@ public class Robot {
         vision = new Vision(hardwareMap);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap);
-
+        turret = new Turret(hardwareMap);
 
 
     }

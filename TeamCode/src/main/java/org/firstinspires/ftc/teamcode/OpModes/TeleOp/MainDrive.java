@@ -5,18 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.RobotContainer.DriveProcesses;
 import org.firstinspires.ftc.teamcode.RobotContainer.Robot;
-import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.Subsystems.Intake;
-import org.firstinspires.ftc.teamcode.Subsystems.Shooter;
+
 
 @TeleOp
 public class MainDrive extends LinearOpMode {
 
 
 
-    private Drivetrain drivetrain;
-    private  Intake intake;
-    private Shooter shooter;
+
     private Robot robot;
     private DriveProcesses driveProcesses;
 
@@ -29,15 +25,22 @@ public class MainDrive extends LinearOpMode {
         double horizontal;
         double strafe;
 
+
+        robot.vision.resetScanner();
         waitForStart();
         while(opModeIsActive()){
             vertical = gamepad1.left_stick_y;
             horizontal = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
 
+            //constant processes
+            robot.vision.scanForClusters();
+
 
             //update PID
-            robot.shooter.calculateShooterRPM();
+            robot.shooter.calculateShooterPID();
+            robot.turret.calculateTurretPIDPower(robot.vision.getCurrentCluster());
+            robot.turret.slipRing();
 
             //updateSubsystems
             driveProcesses.intakeDriveUpdate();
@@ -52,12 +55,13 @@ public class MainDrive extends LinearOpMode {
 
 
 
-            telemetry.addData("lf_motor_power", drivetrain.getLFMotorPower());
-            telemetry.addData("lb_motor_power", drivetrain.getLBMotorPower());
-            telemetry.addData("rf_motor_power", drivetrain.getRFMotorPower());
-            telemetry.addData("rb_motor_power", drivetrain.getRBMotorPower());
+            telemetry.addData("lf_motor_power", robot.drivetrain.getLFMotorPower());
+            telemetry.addData("lb_motor_power", robot.drivetrain.getLBMotorPower());
+            telemetry.addData("rf_motor_power", robot.drivetrain.getRFMotorPower());
+            telemetry.addData("rb_motor_power", robot.drivetrain.getRBMotorPower());
             telemetry.addData("left_toggler_analog", gamepad1.left_trigger);
-            telemetry.addData("ShooterRPM", shooter.getRPM());
+            telemetry.addData("ShooterRPM", robot.shooter.getRPM());
+            telemetry.addData("CurrentCluster", robot.vision.getCurrentCluster());
             //telemetry.addData("shooterPower", shooter.getShooterPower());
             //telemetry.addData("shooterRPM", robot.shooter.getRPM());
             telemetry.update();

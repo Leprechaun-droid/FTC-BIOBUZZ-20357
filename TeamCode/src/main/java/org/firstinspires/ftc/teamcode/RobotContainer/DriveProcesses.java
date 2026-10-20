@@ -29,7 +29,7 @@ public class DriveProcesses {
 
     public void loadShooter() {
         double RPM_Error = Math.abs(targetRPM - robot.shooter.getRPM());
-        if (RPM_Error < 5) {
+        if (RPM_Error < 3) {
             robot.intake.justTransIntake();
 
             //tune this 1.5 value until it is long enough for the ball to have already shot

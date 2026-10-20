@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Subsystems.Tuning;
+package org.firstinspires.ftc.teamcode.Subsystems.ShooterTuning;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;

@@ -32,17 +32,17 @@ public class FarBlueBaseAuto extends LinearOpMode {
     private final Pose startPos = poseFactory.of(15, 133, 270);
     // check if the distance from the cell is the same for each side. It should be relatively simple and just measure
     // the y difference
-    private final Pose farCellShootPos = poseFactory.of(58, 110, 270);
+    private final Pose midPos = poseFactory.of(58, 110, 270);
     private final Pose park = poseFactory.of(9, 117, 270);
 
     // -------
     // Paths
     // -------
     private Path startToFarBlueShoot() {
-        return line(startPos, farCellShootPos).linear(startPos, farCellShootPos);
+        return line(startPos, midPos).linear(startPos, midPos);
     }
     private Path farBlueCellToPark() {
-        return line(farCellShootPos, park).linear(farCellShootPos, park);
+        return line(midPos, park).linear(midPos, park);
     }
 
     // ---------
@@ -62,6 +62,29 @@ public class FarBlueBaseAuto extends LinearOpMode {
     private Command autoRoutine(){
         return sequential(
 
+                //check if cell is raised
+                    //if it is, perform the following action
+                    //if not, waitUntil with conditional or something similar
+                        //add redundancy in case the other team cannot
+
+
+
+
+                //repeat 4 times (we start with 4 preloaded pollen)
+                    //set TargetRPM
+                    //when at specific RPM (or in error range)
+                        //openServoGate
+                        // loadLauncher
+                        // close servoGate
+                        // zeroTransfer
+
+                        // fullFrontIntake
+                        //zeroFrontIntake
+
+
+
+
+
                 //go to Far blue shooting pos or start there
                 //hive is always tipped up on far blue, so I don't need to check aprilTags
                 //shoot
@@ -71,6 +94,7 @@ public class FarBlueBaseAuto extends LinearOpMode {
                 robot.shooter.basicShoot(),
                 //Repeat 4 times
                     //if a certain RPM margin of error is reached, load a ball for shooting
+
                 goToParkFromFarCell()
         );
     }
@@ -82,15 +106,17 @@ public class FarBlueBaseAuto extends LinearOpMode {
     public void runOpMode() {
         Scheduler.reset();
         follower = Constants.create(hardwareMap);
-        robot = new Robot(hardwareMap, gamepad1, gamepad2);
+        robot = new Robot(hardwareMap);
         follower.setPose(startPos);
         Scheduler.schedule(autoRoutine());
         waitForStart();
 
-
+        robot.vision.resetScanner();
         while (opModeIsActive()) {
             follower.update();
-            robot.shooter.calculateShooterRPM();
+            robot.vision.scanForClusters();
+            robot.turret.calculateTurretPIDPower(robot.vision.getCurrentCluster());
+            robot.shooter.calculateShooterPID();
             Scheduler.execute();
 
             telemetry.update();

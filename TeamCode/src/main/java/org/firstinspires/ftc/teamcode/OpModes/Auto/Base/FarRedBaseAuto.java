@@ -73,7 +73,7 @@ public class FarRedBaseAuto extends LinearOpMode {
     public void runOpMode() {
         Scheduler.reset();
         follower = Constants.create(hardwareMap);
-        robot = new Robot(hardwareMap, gamepad1, gamepad2);
+        robot = new Robot(hardwareMap);
         follower.setPose(startPos);
         Scheduler.schedule(autoRoutine());
         waitForStart();

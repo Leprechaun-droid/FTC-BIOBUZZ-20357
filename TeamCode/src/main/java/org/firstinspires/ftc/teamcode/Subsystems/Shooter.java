@@ -3,15 +3,12 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
 
 import com.pedropathing.ivy.Command;
-import com.pedropathing.ivy.CommandBuilder;
 import com.pedropathing.ivy.commands.Commands;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.RobotContainer.Robot;
 
 
 public class Shooter {
@@ -32,14 +29,9 @@ public class Shooter {
         //fill in with actual diameter
 
         private final double flywheelDiameter = 0;
-        //adjust (usually a little larger than 1, like 1.1) to account for loss of KE from flywheel to ball
-        double kRPM = 0;
         //FIND the motor ticks per revolution; find motor first. ask design team what it is
         double TICKS_PER_SHOOTER_MOTOR_REV = 0;
-        //find encoderCPM (
-        private double encoderCPM = 0;
 
-        private double gearRatio = 0;
     //PID Tuning Values
 
         private double kP, kS, kV;
@@ -48,8 +40,7 @@ public class Shooter {
         //put tuning constants in class parameters when I make the PIDController class
         private DcMotorEx shooterMotor;
         //private DcMotorEx rightShooterMotor;
-        private int baseTargetRPM;
-        private Intake intake;
+        private int baseTargetRPM = 0;
     public Shooter(HardwareMap hardwareMap) {
             shooterMotor = hardwareMap.get(DcMotorEx.class, "leftShooterMotor");
 
@@ -81,11 +72,16 @@ public class Shooter {
 
 
         public double getRPM(){
-            return (((getTicksPerSec()/encoderCPM) * 60) / gearRatio);
+        //FIND ENCODER CPM; look in brogan pratt video for encoderCPM definition (should already be open); flywheel is 6000RPM motor
+            double gearRatio = 1;
+            //find encoderCPM (encoder counts per motor revolution)
+            double encoderPPR = 28;
+            double encoderCPM = encoderPPR * 4 * gearRatio;
+            return (((getTicksPerSec()/ encoderCPM) * 60) / gearRatio);
 
         }
 
-        public void calculateShooterRPM(){
+        public void calculateShooterPID(){
 
             double error = baseTargetRPM - getRPM();
             //double check the logic behind this
@@ -107,6 +103,16 @@ public class Shooter {
     public void setBaseTargetRPM(int targRPMBase){
         baseTargetRPM = targRPMBase;
     }
+
+
+
+
+
+
+
+
+
+    //Auto Commands
     public Command basicShoot(){return Commands.instant(() -> setBaseTargetRPM(1000));}
     public Command zeroShoot(){return Commands.instant(() -> setBaseTargetRPM(0));}
 
@@ -130,6 +136,8 @@ public class Shooter {
 
     //make method for calculating distance from cell
     //I'm assuming we're using a dual flywheel, the kind with a wheel on both sides of the ball
+
+    /*
     private double calcOptimalTargetRPM(double disFromCell, double heightThreshold){
         //Finding Target Velocity
         double d = disFromCell;
@@ -157,6 +165,9 @@ public class Shooter {
         //shooterMotor.setPower(power);
 
     }
+
+    */
+
 
 
 
