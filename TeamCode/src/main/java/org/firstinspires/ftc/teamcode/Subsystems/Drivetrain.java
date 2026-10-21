@@ -10,7 +10,6 @@ public class Drivetrain {
     private DcMotor lb_motor;
     private DcMotor rf_motor;
     private DcMotor rb_motor;
-    private double absTotalPower;
     private double lf_motor_power;
     private double lb_motor_power;
     private double rf_motor_power;
@@ -42,7 +41,9 @@ public class Drivetrain {
 
     public void updateDriveMotorPowers(double vertical, double horizontal, double strafe){
 
-        absTotalPower = Math.max((Math.abs(vertical) + Math.abs(horizontal) + Math.abs(strafe)), 1);
+        double absTotalPower = Math.max((Math.abs(vertical) + Math.abs(horizontal) + Math.abs(strafe)), 1);
+
+
         lf_motor_power = -vertical + horizontal + strafe;
         lb_motor_power = -vertical + horizontal - strafe;
         rf_motor_power = -vertical - horizontal - strafe;
@@ -82,16 +83,6 @@ public class Drivetrain {
     public double getRBMotorPower(){
         return rb_motor_power;
     }
-
-
-
-
-
-
-
-
-
-
 
 
 

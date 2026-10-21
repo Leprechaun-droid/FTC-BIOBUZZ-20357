@@ -27,7 +27,7 @@ dependencies {
     implementation 'com.pedropathing.ivy:pedro:1.1.1'
 
 
-    implementation 'com.bylazar:fullpanels:1.0.15' //check
+    //implementation 'com.bylazar:fullpanels:1.0.15' //check
 
 
 }

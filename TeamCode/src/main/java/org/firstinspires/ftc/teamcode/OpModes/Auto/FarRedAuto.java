@@ -58,7 +58,7 @@ public class FarRedAuto extends LinearOpMode {
 
     @Override
     public void runOpMode(){
-        robot = new Robot(hardwareMap, gamepad1, gamepad2);
+        robot = new Robot(hardwareMap);
 
 
         robot.setAlliance(Robot.Alliance.RED);

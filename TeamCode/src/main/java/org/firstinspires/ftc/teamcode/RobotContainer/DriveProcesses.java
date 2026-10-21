@@ -26,6 +26,21 @@ public class DriveProcesses {
 
 
 
+    public void updateTurret(){
+        if(gamepad2.a) {
+            robot.turret.calculateTurretPIDPower(robot.vision.getCurrentCluster());
+        } else {
+            robot.turret.zeroTurret();
+        }
+
+    }
+
+
+
+
+
+
+
 
     public void loadShooter() {
         double RPM_Error = Math.abs(targetRPM - robot.shooter.getRPM());

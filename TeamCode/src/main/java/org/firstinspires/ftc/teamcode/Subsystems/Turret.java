@@ -60,7 +60,7 @@ public class Turret {
 
         double dTerm = 0;
         if(deltaTime > 0){
-            dTerm = (error - lastError)/deltaTime * kD;
+            dTerm = ((error - lastError)/deltaTime) * kD;
         }
 
         //adjust the headingOffsetTolerance
@@ -117,6 +117,11 @@ public class Turret {
 
     public void resetTimer(){
         timer.reset();
+    }
+
+    public void zeroTurret(){
+        turretPinionMotor.setPower(0);
+
     }
 
 

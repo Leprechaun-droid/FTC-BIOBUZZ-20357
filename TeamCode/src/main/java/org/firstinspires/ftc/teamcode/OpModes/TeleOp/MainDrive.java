@@ -39,7 +39,7 @@ public class MainDrive extends LinearOpMode {
 
             //update PID
             robot.shooter.calculateShooterPID();
-            robot.turret.calculateTurretPIDPower(robot.vision.getCurrentCluster());
+            driveProcesses.updateTurret();
             robot.turret.slipRing();
 
             //updateSubsystems

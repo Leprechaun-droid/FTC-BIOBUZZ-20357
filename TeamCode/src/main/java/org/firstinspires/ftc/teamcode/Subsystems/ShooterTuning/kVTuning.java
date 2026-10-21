@@ -21,7 +21,7 @@ public class kVTuning extends LinearOpMode {
 
 
     public void runOpMode(){
-        Robot robot = new Robot(hardwareMap, gamepad1, gamepad2);
+        Robot robot = new Robot(hardwareMap);
 
         waitForStart();
 

@@ -16,7 +16,7 @@ public class kSTuning extends LinearOpMode {
     //{0.00001, 0.0001, 0.001, 0.01};
 
     public void runOpMode(){
-        Robot robot = new Robot(hardwareMap, gamepad1, gamepad2);
+        Robot robot = new Robot(hardwareMap);
 
         waitForStart();
 

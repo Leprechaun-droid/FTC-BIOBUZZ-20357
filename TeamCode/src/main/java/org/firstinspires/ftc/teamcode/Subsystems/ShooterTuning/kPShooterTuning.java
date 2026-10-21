@@ -18,6 +18,7 @@ public class kPShooterTuning extends LinearOpMode {
     public static double kS = 0;
     public static double kP = 0;
 
+    //tune this
     public static int goalRPM = 0;
 
     private Shooter shooter;

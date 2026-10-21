@@ -62,24 +62,32 @@ public class FarBlueBaseAuto extends LinearOpMode {
     private Command autoRoutine(){
         return sequential(
 
+                // init visionPortal (will probably be done in initialization)
+
+
                 //check if cell is raised
                     //if it is, perform the following action
                     //if not, waitUntil with conditional or something similar
-                        //add redundancy in case the other team cannot
+                        //add redundancy in case the other team cannot (probably use a timer to do something else
+                            //if the other team has not tipped it in 5 sec or so)
+                                //****If I have time, add a path to cross to the other side to shoot
+                                    //probably won't have time for the first meet
 
 
-
-
+                //set TargetRPM
                 //repeat 4 times (we start with 4 preloaded pollen)
-                    //set TargetRPM
-                    //when at specific RPM (or in error range)
-                        //openServoGate
-                        // loadLauncher
-                        // close servoGate
-                        // zeroTransfer
+                    //when at specific RPM (or in acceptable error range)
+                        // reset shootingTimer
+                        // openServoGate (for specific number of seconds)
+                        // wait a short amount of time so the gate is fully open (estimate 0.5 seconds (probably enough for the gate to have opened fully)
+                        // loadLauncher (for same number of seconds)
+                        // close servoGate (after the specified number of seconds)
+                        // zeroTransfer (after the specified number of seconds)
 
-                        // fullFrontIntake
-                        //zeroFrontIntake
+                        // fullFrontIntake (for a short time to load the lower pollen)
+                        //zeroFrontIntake (for a short time to load the lower pollen)
+
+                // move to mid Pos after the previous command is complete
 
 
 
