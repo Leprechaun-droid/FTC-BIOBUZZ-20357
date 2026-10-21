@@ -22,6 +22,12 @@ plugins {
 allprojects {
     repositories {
         mavenCentral()
+        maven {
+            url = "https://mymaven.bylazar.com/releases"
+        }
+        maven {
+            url = "https://repo.diary.foundation/releases"
+        }
         google()
     }
 }

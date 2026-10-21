@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.OpModes.Auto.Base;
 
 import static com.pedropathing.api.Paths.line;
+import static com.pedropathing.ivy.commands.Commands.waitMs;
+import static com.pedropathing.ivy.groups.Groups.parallel;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
@@ -30,17 +32,17 @@ public class FarBlueBaseAuto extends LinearOpMode {
     private final Pose startPos = poseFactory.of(15, 133, 270);
     // check if the distance from the cell is the same for each side. It should be relatively simple and just measure
     // the y difference
-    private final Pose farCellShootPos = poseFactory.of(58, 110, 270);
+    private final Pose midPos = poseFactory.of(58, 110, 270);
     private final Pose park = poseFactory.of(9, 117, 270);
 
     // -------
     // Paths
     // -------
     private Path startToFarBlueShoot() {
-        return line(startPos, farCellShootPos).linear(startPos, farCellShootPos);
+        return line(startPos, midPos).linear(startPos, midPos);
     }
     private Path farBlueCellToPark() {
-        return line(farCellShootPos, park).linear(farCellShootPos, park);
+        return line(midPos, park).linear(midPos, park);
     }
 
     // ---------
@@ -59,8 +61,48 @@ public class FarBlueBaseAuto extends LinearOpMode {
     // ------------
     private Command autoRoutine(){
         return sequential(
+
+                // init visionPortal (will probably be done in initialization)
+
+
+                //check if cell is raised
+                    //if it is, perform the following action
+                    //if not, waitUntil with conditional or something similar
+                        //add redundancy in case the other team cannot (probably use a timer to do something else
+                            //if the other team has not tipped it in 5 sec or so)
+                                //****If I have time, add a path to cross to the other side to shoot
+                                    //probably won't have time for the first meet
+
+
+                //set TargetRPM
+                //repeat 4 times (we start with 4 preloaded pollen)
+                    //when at specific RPM (or in acceptable error range)
+                        // reset shootingTimer
+                        // openServoGate (for specific number of seconds)
+                        // wait a short amount of time so the gate is fully open (estimate 0.5 seconds (probably enough for the gate to have opened fully)
+                        // loadLauncher (for same number of seconds)
+                        // close servoGate (after the specified number of seconds)
+                        // zeroTransfer (after the specified number of seconds)
+
+                        // fullFrontIntake (for a short time to load the lower pollen)
+                        //zeroFrontIntake (for a short time to load the lower pollen)
+
+                // move to mid Pos after the previous command is complete
+
+
+
+
+
+                //go to Far blue shooting pos or start there
+                //hive is always tipped up on far blue, so I don't need to check aprilTags
+                //shoot
+                //go to park
+
                 goToFarBlue(),
-                //add shoot
+                robot.shooter.basicShoot(),
+                //Repeat 4 times
+                    //if a certain RPM margin of error is reached, load a ball for shooting
+
                 goToParkFromFarCell()
         );
     }
@@ -76,8 +118,13 @@ public class FarBlueBaseAuto extends LinearOpMode {
         follower.setPose(startPos);
         Scheduler.schedule(autoRoutine());
         waitForStart();
+
+        robot.vision.resetScanner();
         while (opModeIsActive()) {
             follower.update();
+            robot.vision.scanForClusters();
+            robot.turret.calculateTurretPIDPower(robot.vision.getCurrentCluster());
+            robot.shooter.calculateShooterPID();
             Scheduler.execute();
 
             telemetry.update();

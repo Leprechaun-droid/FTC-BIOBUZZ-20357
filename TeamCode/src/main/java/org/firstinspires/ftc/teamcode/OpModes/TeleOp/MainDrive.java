@@ -1,40 +1,52 @@
 package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.RobotContainer.DriveProcesses;
 import org.firstinspires.ftc.teamcode.RobotContainer.Robot;
 
+
+@TeleOp
 public class MainDrive extends LinearOpMode {
+
+
+
+
     private Robot robot;
-    //private Follower follower;
+    private DriveProcesses driveProcesses;
 
-
-
-
-
-
-
-
-
+    @Override
     public void runOpMode(){
         robot = new Robot(hardwareMap);
-        //follower = Constants.create(hardwareMap)
-        //follower.setPose()
-        /*
-        using follower to track position probably won't work unless I can find a way to put its
-        position at the end of the selected Auto
-        */
+        driveProcesses = new DriveProcesses(hardwareMap, gamepad1, gamepad2);
+
+        double vertical;
+        double horizontal;
+        double strafe;
 
 
+        robot.vision.resetScanner();
         waitForStart();
         while(opModeIsActive()){
-            double vertical = gamepad1.left_stick_y;
-            double horizontal = gamepad1.right_stick_x;
-            double strafe = gamepad1.left_stick_x;
+            vertical = gamepad1.left_stick_y;
+            horizontal = gamepad1.right_stick_x;
+            strafe = gamepad1.left_stick_x;
 
-            if(Math.abs(vertical) + Math.abs(horizontal) + Math.abs(strafe) != 0){
-                robot.drivetrain.updateMotorPowers(vertical, horizontal, strafe);
-            }
+            //constant processes
+            robot.vision.scanForClusters();
+
+
+            //update PID
+            robot.shooter.calculateShooterPID();
+            driveProcesses.updateTurret();
+            robot.turret.slipRing();
+
+            //updateSubsystems
+            driveProcesses.intakeDriveUpdate();
+            driveProcesses.shooterDriveUpdate();
+            robot.drivetrain.updateDriveMotorPowers(vertical, horizontal, strafe);
+
 
 
 
@@ -47,17 +59,17 @@ public class MainDrive extends LinearOpMode {
             telemetry.addData("lb_motor_power", robot.drivetrain.getLBMotorPower());
             telemetry.addData("rf_motor_power", robot.drivetrain.getRFMotorPower());
             telemetry.addData("rb_motor_power", robot.drivetrain.getRBMotorPower());
-
+            telemetry.addData("left_toggler_analog", gamepad1.left_trigger);
+            telemetry.addData("ShooterRPM", robot.shooter.getRPM());
+            telemetry.addData("CurrentCluster", robot.vision.getCurrentCluster());
+            //telemetry.addData("shooterPower", shooter.getShooterPower());
+            //telemetry.addData("shooterRPM", robot.shooter.getRPM());
+            telemetry.update();
             //telemetry.addData("robotPose", "%2f, %2f", follower.pose().x(), follower.pose().y());
 
 
         }
     }
-
-
-
-
-
 
 
 

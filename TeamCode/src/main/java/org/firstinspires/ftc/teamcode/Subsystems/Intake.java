@@ -1,62 +1,91 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.RobotContainer.Robot;
 
 public class Intake {
-    DcMotor intakeMotor;
-    Gamepad gamepad1;
-    Gamepad gamepad2;
 
-    // ADD OVERALL updateINTAKE class that includes all manual intake methods
+
+
+    DcMotor intakeMotor;
+    DcMotor transferMotor;
 
 
     //find how to pair variables to gamepads in constructor
-    public Intake(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2){
+    public Intake(HardwareMap hardwareMap){
         //adjust deviceName to config if I give it a different name in the configuration
+
         intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
-        this.gamepad1 = gamepad1;
-        this.gamepad2 = gamepad2;
+        transferMotor = hardwareMap.get(DcMotor.class, "transferMotor");
+
+        intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        transferMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        transferMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        transferMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
+
     }
 
-    public void updateIntake(){
-        //can put them in directly with imported Gamepad class
-        manualIntake(gamepad1.right_trigger);
-        manualEject(gamepad1.left_trigger);
-
-
-    }
 
 
 
-    public void autoIntake(){
-        //adjust power sign based on direction
+
+
+
+
+    public void justFrontIntake(){
+
         intakeMotor.setPower(1);
     }
 
-
-    public void autoEject(){
-        //adjust power sign based on direction
-        intakeMotor.setPower(-1);
-    }
-
-    public void manualIntake(double rightTrigger){
-        if(gamepad1.right_trigger > 0.1){
-            //ask if they want it to be paired to rightTrigger or just as -1
-            intakeMotor.setPower(-rightTrigger);
-        }
-    }
-
-    public void manualEject(double leftTrigger){
-        if(gamepad1.left_trigger > 0.1){
-            intakeMotor.setPower(leftTrigger);
-        }
-    }
-
-    public void raiseIntakeBar(){
-        //if(gamepad1.)
+    public void justFrontEject(){
+            intakeMotor.setPower(-1);
 
     }
+
+    public void justTransIntake(){
+        transferMotor.setPower(1);
+    }
+    public void justTransEject(){ transferMotor.setPower(-1);}
+
+    public void fullIntake(){
+                //adjust directions of the setPower as fit
+                intakeMotor.setPower(1);
+                transferMotor.setPower(1);
+    }
+
+    public void fullEject(){
+            intakeMotor.setPower(-1);
+            transferMotor.setPower(-1);
+
+    }
+
+    public void zeroTransfer(){
+        transferMotor.setPower(0);
+    }
+
+    public void zeroIntake(){
+        intakeMotor.setPower(0);
+    }
+
+
+
+
+
+
+
+
+
+
 
 }
